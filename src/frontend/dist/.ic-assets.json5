@@ -1,0 +1,62 @@
+{
+  // JavaScript files - prioritized first for proper MIME type enforcement
+  match: "**/*.js",
+  headers: {
+    "Content-Type": "application/javascript",
+    "Cache-Control": "public, max-age=31536000, immutable"
+  }
+},
+{
+  // CSS files - prioritized second for proper MIME type enforcement
+  match: "**/*.css",
+  headers: {
+    "Content-Type": "text/css",
+    "Cache-Control": "public, max-age=31536000, immutable"
+  }
+},
+{
+  // Image files - auto MIME detection with long-term caching
+  match: "**/*.{png,jpg,jpeg,svg,webp,gif}",
+  headers: {
+    "Cache-Control": "public, max-age=31536000, immutable"
+  }
+},
+{
+  // Static assets - long-term immutable cache headers
+  match: "/assets/**",
+  headers: {
+    "Cache-Control": "public, max-age=31536000, immutable"
+  }
+},
+{
+  // Generated assets - long-term caching
+  match: "/generated/**",
+  headers: {
+    "Cache-Control": "public, max-age=31536000, immutable"
+  }
+},
+{
+  // Well-known files - plain text with identity encoding
+  match: ".well-known/**",
+  contentEncoding: "identity",
+  headers: {
+    "Content-Type": "text/plain"
+  }
+},
+{
+  // Index.html - short cache for live updates
+  match: "index.html",
+  headers: {
+    "Cache-Control": "public, max-age=300"
+  }
+},
+{
+  // Universal SPA fallback - Content-Type removed for auto-detection
+  match: "**/*",
+  fallback: "index.html",
+  security_policy: "standard"
+},
+{
+  // Global security policy warning suppression
+  disable_security_policy_warning: true
+}

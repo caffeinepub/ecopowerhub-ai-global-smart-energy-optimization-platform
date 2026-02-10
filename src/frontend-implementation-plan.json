@@ -1,0 +1,101 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Add required generated PNG assets and enforce PNG dimension validation during build verification",
+  "requirements": [
+    {
+      "id": "REQ-7",
+      "summary": "Add the required generated PNG assets under frontend/public/generated with exact filenames and dimensions so Vite publishes them to dist/generated and they are served from /generated/ at runtime.",
+      "acceptanceCriteria": [
+        "Each listed filename exists as a real file under `frontend/public/generated/` with the exact casing and spelling.",
+        "Each listed image has the exact pixel dimensions specified in its filename (e.g., `...dim_800x600...` is exactly 800×600 px).",
+        "After `vite build`, each listed file exists under `frontend/dist/generated/` with the exact same filename.",
+        "At runtime, requesting `/generated/<filename>` returns HTTP 200 for each listed filename."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/generated/hero-background-globe.dim_1920x1080.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 1920×1080 px."
+        },
+        {
+          "path": "frontend/public/generated/interactive-setup-diagram.dim_900x500.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 900×500 px."
+        },
+        {
+          "path": "frontend/public/generated/emporia-vue-220v-tutorial.dim_800x600.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×600 px."
+        },
+        {
+          "path": "frontend/public/generated/device-setup-cards.dim_900x500.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 900×500 px."
+        },
+        {
+          "path": "frontend/public/generated/ai-chatbot-interface.dim_600x400.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 600×400 px."
+        },
+        {
+          "path": "frontend/public/generated/global-faq-interface.dim_800x400.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×400 px."
+        },
+        {
+          "path": "frontend/public/generated/case-studies-savings-chart.dim_800x500.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×500 px."
+        },
+        {
+          "path": "frontend/public/generated/residential-case-study-dashboard.dim_800x600.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×600 px."
+        },
+        {
+          "path": "frontend/public/generated/commercial-energy-optimization.dim_800x600.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×600 px."
+        },
+        {
+          "path": "frontend/public/generated/industrial-energy-case-study.dim_800x600.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×600 px."
+        },
+        {
+          "path": "frontend/public/generated/testimonial-michael-avatar.dim_100x100.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 100×100 px."
+        },
+        {
+          "path": "frontend/public/generated/testimonial-sophie-avatar.dim_100x100.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 100×100 px."
+        },
+        {
+          "path": "frontend/public/generated/scada-benefits-infographic.dim_800x500.png",
+          "operation": "create",
+          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×500 px."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Enhance frontend/vite-build-verify.js to validate required PNG presence and pixel dimensions (parsed from dim_WIDTHxHEIGHT in filename) in both public/generated and dist/generated, failing with clear English errors.",
+      "acceptanceCriteria": [
+        "Running `node frontend/vite-build-verify.js` fails if any required file is missing from `frontend/public/generated` or `frontend/dist/generated`.",
+        "Running `node frontend/vite-build-verify.js` fails if any required file exists but its actual pixel dimensions do not match the `dim_WIDTHxHEIGHT` part of its filename.",
+        "Failure output is in English and identifies (a) the filename and (b) expected vs actual dimensions.",
+        "Script continues to pass when all required files exist and all dimensions match."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/vite-build-verify.js",
+          "operation": "modify",
+          "description": "Update the verification script to: (1) define the authoritative required PNG list (the 13 filenames from REQ-7) and require exact case-sensitive matches; (2) verify each required file exists in both frontend/public/generated and frontend/dist/generated; (3) parse expected WIDTH×HEIGHT from each filename segment dim_WIDTHxHEIGHT; (4) read actual PNG pixel dimensions (without adding external dependencies) and compare against expected; (5) exit with code 1 and clear English error messages that include filename plus expected vs actual dimensions and whether the failure is in public/generated or dist/generated; (6) ensure all logs/errors are English-only (remove emoji-only status markers where practical) while keeping output readable."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "kind": "build_request",
+  "title": "Add required generated PNG assets (exact filenames) and enforce dimension validation in build verification",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-7",
+      "text": "Add the following PNG files to `frontend/public/generated/` with the exact filenames (case-sensitive) and pixel dimensions encoded in each filename, so they are served at runtime from `/generated/...` and can be referenced without any filename changes: hero-background-globe.dim_1920x1080.png, interactive-setup-diagram.dim_900x500.png, emporia-vue-220v-tutorial.dim_800x600.png, device-setup-cards.dim_900x500.png, ai-chatbot-interface.dim_600x400.png, global-faq-interface.dim_800x400.png, case-studies-savings-chart.dim_800x500.png, residential-case-study-dashboard.dim_800x600.png, commercial-energy-optimization.dim_800x600.png, industrial-energy-case-study.dim_800x600.png, testimonial-michael-avatar.dim_100x100.png, testimonial-sophie-avatar.dim_100x100.png, scada-benefits-infographic.dim_800x500.png.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-latest"
+        ],
+        "quotes": [
+          "ok - Exact filenames required (case-sensitive, no changes):\nhero-background-globe.dim_1920x1080.png\ninteractive-setup-diagram.dim_900x500.png\nemporia-vue-220v-tutorial.dim_800x600.png\ndevice-setup-cards.dim_900x500.png\nai-chatbot-interface.dim_600x400.png\nglobal-faq-interface.dim_800x400.png\ncase-studies-savings-chart.dim_800x500.png\nresidential-case-study-dashboard.dim_800x600.png\ncommercial-energy-optimization.dim_800x600.png\nindustrial-energy-case-study.dim_800x600.png\ntestimonial-michael-avatar.dim_100x100.png\ntestimonial-sophie-avatar.dim_100x100.png\nscada-benefits-infographic.dim_800x500.png"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each listed filename exists as a real file under `frontend/public/generated/` with the exact casing and spelling.",
+        "Each listed image has the exact pixel dimensions specified in its filename (e.g., `...dim_800x600...` is exactly 800×600 px).",
+        "After `vite build`, each listed file exists under `frontend/dist/generated/` with the exact same filename.",
+        "At runtime, requesting `/generated/<filename>` returns HTTP 200 for each listed filename."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Update `frontend/vite-build-verify.js` to validate the pixel dimensions (width×height) of the required generated PNG files in addition to verifying presence, and fail the script with a clear English error message if any required file is missing or has incorrect dimensions.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-latest"
+        ],
+        "quotes": [
+          "is this correct are they the right sizes ?",
+          "Exact filenames required (case-sensitive, no changes)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Running `node frontend/vite-build-verify.js` fails if any required file is missing from `frontend/public/generated` or `frontend/dist/generated`.",
+        "Running `node frontend/vite-build-verify.js` fails if any required file exists but its actual pixel dimensions do not match the `dim_WIDTHxHEIGHT` part of its filename.",
+        "Failure output is in English and identifies (a) the filename and (b) expected vs actual dimensions.",
+        "Script continues to pass when all required files exist and all dimensions match."
+      ]
+    }
+  ],
+  "constraints": [
+    "Use the exact filenames provided by the user (case-sensitive; no renames or substitutions).",
+    "All user-facing text included in logs/errors and any UI changes must be in English.",
+    "Do not modify any files under immutable paths listed in SYSTEM_CONTEXT (e.g., `frontend/src/components/ui`, `frontend/src/hooks/useInternetIdentity.ts(x)`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`).",
+    "Static image assets must be served from the frontend as build artifacts (i.e., present under `frontend/public/generated/` so Vite publishes them to `frontend/dist/generated/`)."
+  ],
+  "nonGoals": [
+    "Adding new backend functionality or modifying Motoko canister logic.",
+    "Changing existing asset URL conventions away from `/generated/...`.",
+    "Implementing new product features beyond restoring/validating these static assets."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Abstract glowing globe network background (hero-background-globe.dim_1920x1080.png)",
+      "Clean step-by-step setup diagram with labeled nodes and arrows (interactive-setup-diagram.dim_900x500.png)",
+      "Electrical panel monitoring tutorial illustration with callouts (emporia-vue-220v-tutorial.dim_800x600.png)",
+      "Grid of device setup cards with icons and short labels (device-setup-cards.dim_900x500.png)",
+      "Modern chatbot UI screenshot-style illustration with message bubbles (ai-chatbot-interface.dim_600x400.png)",
+      "FAQ interface illustration with expandable question rows (global-faq-interface.dim_800x400.png)",
+      "Savings chart illustration with bars/line and annotations (case-studies-savings-chart.dim_800x500.png)",
+      "Residential energy dashboard UI illustration with gauges and charts (residential-case-study-dashboard.dim_800x600.png)",
+      "Commercial energy optimization dashboard illustration with KPI tiles (commercial-energy-optimization.dim_800x600.png)",
+      "Industrial energy case study dashboard illustration with machinery-themed UI panels (industrial-energy-case-study.dim_800x600.png)",
+      "Male headshot avatar illustration on plain background (testimonial-michael-avatar.dim_100x100.png)",
+      "Female headshot avatar illustration on plain background (testimonial-sophie-avatar.dim_100x100.png)",
+      "SCADA benefits infographic with icons and section blocks (scada-benefits-infographic.dim_800x500.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use English for any user-facing text."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

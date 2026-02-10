@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 140 30% 98%;
+    --foreground: 140 10% 10%;
+    --card: 140 20% 100%;
+    --card-foreground: 140 10% 10%;
+    --popover: 140 20% 100%;
+    --popover-foreground: 140 10% 10%;
+    --primary: 158 64% 52%;
+    --primary-foreground: 140 10% 98%;
+    --secondary: 140 20% 90%;
+    --secondary-foreground: 140 10% 10%;
+    --muted: 140 20% 95%;
+    --muted-foreground: 140 10% 45%;
+    --accent: 158 64% 52%;
+    --accent-foreground: 140 10% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 140 20% 88%;
+    --input: 140 20% 88%;
+    --ring: 158 64% 52%;
+    --radius: 0.5rem;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+  }
+
+  .dark {
+    --background: 140 30% 8%;
+    --foreground: 140 10% 95%;
+    --card: 140 20% 10%;
+    --card-foreground: 140 10% 95%;
+    --popover: 140 20% 10%;
+    --popover-foreground: 140 10% 95%;
+    --primary: 158 64% 52%;
+    --primary-foreground: 140 10% 10%;
+    --secondary: 140 20% 20%;
+    --secondary-foreground: 140 10% 95%;
+    --muted: 140 20% 15%;
+    --muted-foreground: 140 10% 60%;
+    --accent: 158 64% 52%;
+    --accent-foreground: 140 10% 10%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 140 20% 20%;
+    --input: 140 20% 20%;
+    --ring: 158 64% 52%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Grid pattern background utility */
+.grid-pattern-bg {
+  background-image: 
+    linear-gradient(to right, oklch(var(--primary) / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(var(--primary) / 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Stable image component styles */
+.stable-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.stable-image {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.stable-image.loading {
+  opacity: 0;
+}
+
+.stable-image.loaded {
+  opacity: 1;
+}
+
+.stable-image.error {
+  opacity: 0.5;
+}
+
+.stable-image-placeholder {
+  pointer-events: none;
+}

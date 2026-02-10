@@ -1,0 +1,71 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-10T07:22:36.352Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 2,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-7",
+        "summary": "Add the following PNG files to `frontend/public/generated/` with the exact filenames (case-sensitive) and pixel dimensions encoded in each filename, so they are served at runtime from `/generated/...` and can be referenced without any filename changes: hero-background-globe.dim_1920x1080.png, interactive-setup-diagram.dim_900x500.png, emporia-vue-220v-tutorial.dim_800x600.png, device-setup-cards.dim_900x500.png, ai-chatbot-interface.dim_600x400.png, global-faq-interface.dim_800x400.png, case-studies-savings-chart.dim_800x500.png, residential-case-study-dashboard.dim_800x600.png, commercial-energy-optimization.dim_800x600.png, industrial-energy-case-study.dim_800x600.png, testimonial-michael-avatar.dim_100x100.png, testimonial-sophie-avatar.dim_100x100.png, scada-benefits-infographic.dim_800x500.png.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/public/generated/hero-background-globe.dim_1920x1080.png",
+          "frontend/public/generated/interactive-setup-diagram.dim_900x500.png",
+          "frontend/public/generated/emporia-vue-220v-tutorial.dim_800x600.png",
+          "frontend/public/generated/device-setup-cards.dim_900x500.png",
+          "frontend/public/generated/ai-chatbot-interface.dim_600x400.png",
+          "frontend/public/generated/global-faq-interface.dim_800x400.png",
+          "frontend/public/generated/case-studies-savings-chart.dim_800x500.png",
+          "frontend/public/generated/residential-case-study-dashboard.dim_800x600.png",
+          "frontend/public/generated/commercial-energy-optimization.dim_800x600.png",
+          "frontend/public/generated/industrial-energy-case-study.dim_800x600.png",
+          "frontend/public/generated/testimonial-michael-avatar.dim_100x100.png",
+          "frontend/public/generated/testimonial-sophie-avatar.dim_100x100.png",
+          "frontend/public/generated/scada-benefits-infographic.dim_800x500.png"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Update `frontend/vite-build-verify.js` to validate the pixel dimensions (width×height) of the required generated PNG files in addition to verifying presence, and fail the script with a clear English error message if any required file is missing or has incorrect dimensions.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/vite-build-verify.js"
+        ],
+        "matchedFiles": [
+          "frontend/vite-build-verify.js"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/public/assets/generated/ai-chatbot-interface.dim_600x400.png",
+    "frontend/public/assets/generated/case-studies-savings-chart.dim_800x500.png",
+    "frontend/public/assets/generated/commercial-energy-optimization.dim_800x600.png",
+    "frontend/public/assets/generated/device-setup-cards.dim_900x500.png",
+    "frontend/public/assets/generated/emporia-vue-220v-tutorial.dim_800x600.png",
+    "frontend/public/assets/generated/global-faq-interface.dim_800x400.png",
+    "frontend/public/assets/generated/hero-background-globe.dim_1920x1080.png",
+    "frontend/public/assets/generated/industrial-energy-case-study.dim_800x600.png",
+    "frontend/public/assets/generated/interactive-setup-diagram.dim_900x500.png",
+    "frontend/public/assets/generated/residential-case-study-dashboard.dim_800x600.png",
+    "frontend/public/assets/generated/scada-benefits-infographic.dim_800x500.png",
+    "frontend/public/assets/generated/testimonial-michael-avatar.dim_100x100.png",
+    "frontend/public/assets/generated/testimonial-sophie-avatar.dim_100x100.png",
+    "frontend/vite-build-verify.js",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

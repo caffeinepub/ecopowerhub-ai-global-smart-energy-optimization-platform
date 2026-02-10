@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "EcoPowerHub AI React/Vite frontend deployed to ICP asset canister; current production shows only minimal static text due to missing generated PNG assets (and possibly React mount/bundle issues). Scope now includes restoring/regenerating the full set of visual assets and ensuring they are deployed correctly under frontend/public/generated with proper asset-canister headers.",
+  "architectural_notes": [
+    "Static image assets must live in frontend/public/generated so Vite includes them and ICP asset canister serves them at /generated/*.",
+    "Ensure .ic-assets.json5 is packaged with frontend/dist and includes correct MIME/cache headers for PNG/SVG/JPG and other static assets.",
+    "All static assets must use exact, case-sensitive filenames as referenced by the frontend; do not rename or adjust casing when adding to frontend/public/generated."
+  ],
+  "known_issues": [
+    "Production site renders only minimal static text; expected React UI and visuals are missing due to absent generated PNG assets (and possibly React not mounting).",
+    "generated/ PNG asset set is missing from the project download/build output, causing 404s and fallback background in hero.",
+    "Device Integration Guides: device logo images are not showing reliably and appear to flicker when rendering the setup guide cards."
+  ],
+  "isFixRequest": true,
+  "imageRequirements": "## Required Images\n- Abstract glowing globe network background (hero-background-globe.dim_1920x1080.png)\n- Clean step-by-step setup diagram with labeled nodes and arrows (interactive-setup-diagram.dim_900x500.png)\n- Electrical panel monitoring tutorial illustration with callouts (emporia-vue-220v-tutorial.dim_800x600.png)\n- Grid of device setup cards with icons and short labels (device-setup-cards.dim_900x500.png)\n- Modern chatbot UI screenshot-style illustration with message bubbles (ai-chatbot-interface.dim_600x400.png)\n- FAQ interface illustration with expandable question rows (global-faq-interface.dim_800x400.png)\n- Savings chart illustration with bars/line and annotations (case-studies-savings-chart.dim_800x500.png)\n- Residential energy dashboard UI illustration with gauges and charts (residential-case-study-dashboard.dim_800x600.png)\n- Commercial energy optimization dashboard illustration with KPI tiles (commercial-energy-optimization.dim_800x600.png)\n- Industrial energy case study dashboard illustration with machinery-themed UI panels (industrial-energy-case-study.dim_800x600.png)\n- Male headshot avatar illustration on plain background (testimonial-michael-avatar.dim_100x100.png)\n- Female headshot avatar illustration on plain background (testimonial-sophie-avatar.dim_100x100.png)\n- SCADA benefits infographic with icons and section blocks (scada-benefits-infographic.dim_800x500.png)",
+  "existing_features": [
+    {
+      "id": "feature-ensure-the-landing-page-hero-section-background-asset-referenced-at-generated-hero-background-globe-dim-1920x1080-png-is-present-and-renders-as-the-full-screen-hero-background-no-missing-image-fallback-background",
+      "title": "Ensure the landing page hero section background asset referenced at `/generated/hero-background-globe.dim_1920x1080.png` is present and renders as the full-screen hero background (no missing image/fallback background).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-verify-and-fix-any-frontend-references-to-the-restored-assets-so-they-consistently-load-from-generated-at-runtime-not-from-missing-paths-without-modifying-any-files-in-frontend-src-components-ui-or-other-immutable-paths",
+      "title": "Verify and fix any frontend references to the restored assets so they consistently load from `/generated/...` at runtime (not from missing paths), without modifying any files in `frontend/src/components/ui` or other immutable paths.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-device-integration-guides-page-so-device-logo-images-and-guide-images-render-consistently-no-flicker-no-intermittent-missing-images-across-initial-load-scrolling-and-expanding-collapsing-guide-details",
+      "title": "Fix the Device Integration Guides page so device logo images and guide images render consistently (no flicker, no intermittent missing images) across initial load, scrolling, and expanding/collapsing guide details.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-every-device-guide-image-path-referenced-by-frontend-src-pages-deviceintegrationguidespage-tsx-exists-as-a-real-static-asset-under-frontend-public-generated-and-is-served-at-runtime-from-generated-with-the-exact-filenames-used-in-code",
+      "title": "Ensure every device guide image path referenced by `frontend/src/pages/DeviceIntegrationGuidesPage.tsx` exists as a real static asset under `frontend/public/generated/` and is served at runtime from `/generated/...` with the exact filenames used in code.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-service-worker-caching-behavior-to-avoid-visible-image-flicker-caused-by-repeated-network-first-fetching-for-same-origin-static-images-under-generated-and-any-other-static-image-directories-used-by-the-app",
+      "title": "Update the service worker caching behavior to avoid visible image flicker caused by repeated network-first fetching for same-origin static images under `/generated/**` (and any other static image directories used by the app).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-frontend-vite-build-verify-js-to-validate-the-pixel-dimensions-width-height-of-the-required-generated-png-files-in-addition-to-verifying-presence-and-fail-the-script-with-a-clear-english-error-message-if-any-required-file-is-missing-or-has-incorrect-dimensions",
+      "title": "Update `frontend/vite-build-verify.js` to validate the pixel dimensions (width×height) of the required generated PNG files in addition to verifying presence, and fail the script with a clear English error message if any required file is missing or has incorrect dimensions.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Regenerate/restore all missing generated PNG visual assets (including hero globe) and place them in frontend/public/generated for correct deployment",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Regenerate and add the full missing PNG asset set into `frontend/public/generated/` using the exact filenames provided by the user, so that the app no longer has broken visuals due to missing static assets.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Fix missing/flickering images (device logos) in the Device Integration Guides section so guide card pictures render consistently without flicker.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add the following PNG files to `frontend/public/generated/` with the exact filenames (case-sensitive) and pixel dimensions encoded in each filename, so they are served at runtime from `/generated/...` and can be referenced without any filename changes: hero-background-globe.dim_1920x1080.png, interactive-setup-diagram.dim_900x500.png, emporia-vue-220v-tutorial.dim_800x600.png, device-setup-cards.dim_900x500.png, ai-chatbot-interface.dim_600x400.png, global-faq-interface.dim_800x400.png, case-studies-savings-chart.dim_800x500.png, residential-case-study-dashboard.dim_800x600.png, commercial-energy-optimization.dim_800x600.png, industrial-energy-case-study.dim_800x600.png, testimonial-michael-avatar.dim_100x100.png, testimonial-sophie-avatar.dim_100x100.png, scada-benefits-infographic.dim_800x500.png.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "EcoPowerHub AI",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
