@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, DollarSign, TrendingUp, Users, Award } from 'lucide-react';
 import { GENERATED_ASSETS } from '../lib/generatedAssetPaths';
+import { StableImage } from '../components/StableImage';
 
 interface AffiliateProgram {
   id: string;
@@ -21,7 +22,7 @@ const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
   {
     id: 'sense',
     name: 'Sense Energy Monitor',
-    logoPath: '/generated/sense-logo-transparent.dim_150x150.png',
+    logoPath: GENERATED_ASSETS.senseLogo,
     description: 'AI-powered whole-home energy monitor with real-time device detection',
     commissionRate: '8-12%',
     cookieDuration: '30 days',
@@ -38,7 +39,7 @@ const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
   {
     id: 'emporia',
     name: 'Emporia Energy',
-    logoPath: '/generated/emporia-logo-transparent.dim_150x150.png',
+    logoPath: GENERATED_ASSETS.emporiaLogo,
     description: 'Affordable whole-home energy monitoring with circuit-level insights',
     commissionRate: '10%',
     cookieDuration: '45 days',
@@ -55,7 +56,7 @@ const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
   {
     id: 'amazon-associates',
     name: 'Amazon Associates',
-    logoPath: '/generated/sense-logo-transparent.dim_150x150.png',
+    logoPath: GENERATED_ASSETS.senseLogo,
     description: 'Earn commissions on smart plugs, energy monitors, and home automation devices',
     commissionRate: '3-10%',
     cookieDuration: '24 hours',
@@ -72,7 +73,7 @@ const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
   {
     id: 'shareasale',
     name: 'ShareASale Network',
-    logoPath: '/generated/sense-logo-transparent.dim_150x150.png',
+    logoPath: GENERATED_ASSETS.senseLogo,
     description: 'Access 100+ energy, solar, and smart home brands through one network',
     commissionRate: '5-20%',
     cookieDuration: 'Varies by merchant',
@@ -89,7 +90,7 @@ const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
   {
     id: 'cj-affiliate',
     name: 'CJ Affiliate (Commission Junction)',
-    logoPath: '/generated/sense-logo-transparent.dim_150x150.png',
+    logoPath: GENERATED_ASSETS.senseLogo,
     description: 'Premium affiliate network with top solar and energy efficiency brands',
     commissionRate: '5-25%',
     cookieDuration: 'Varies by merchant',
@@ -155,13 +156,11 @@ export default function PartnerMarketplacePage() {
             <Card key={program.id} className="overflow-hidden hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between mb-4">
-                  <img
+                  <StableImage
                     src={program.logoPath}
                     alt={`${program.name} logo`}
                     className="w-20 h-20 object-contain"
-                    onError={(e) => {
-                      e.currentTarget.src = '/generated/sense-logo-transparent.dim_150x150.png';
-                    }}
+                    fallbackSrc={GENERATED_ASSETS.senseLogo}
                   />
                   <Badge className={getCategoryBadgeColor(program.category)}>
                     {program.category.replace('-', ' ')}
@@ -300,7 +299,7 @@ export default function PartnerMarketplacePage() {
                   </li>
                   <li className="flex gap-2">
                     <span className="text-green-600">✓</span>
-                    <span>Focus on products that match your audience needs</span>
+                    <span>Build trust with your audience first</span>
                   </li>
                 </ul>
               </div>
@@ -309,23 +308,23 @@ export default function PartnerMarketplacePage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex gap-2">
                     <span className="text-red-600">✗</span>
-                    <span>Hide affiliate links or relationships</span>
+                    <span>Spam affiliate links without context</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-red-600">✗</span>
-                    <span>Make false claims about products</span>
+                    <span>Recommend products solely for commission</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-red-600">✗</span>
-                    <span>Spam users with excessive promotions</span>
+                    <span>Hide affiliate relationships from users</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-red-600">✗</span>
-                    <span>Recommend products solely for high commissions</span>
+                    <span>Make false claims about product benefits</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-red-600">✗</span>
-                    <span>Violate program terms and conditions</span>
+                    <span>Ignore program terms and conditions</span>
                   </li>
                 </ul>
               </div>
@@ -333,6 +332,27 @@ export default function PartnerMarketplacePage() {
           </CardContent>
         </Card>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t bg-card mt-12">
+        <div className="container mx-auto px-4 py-6">
+          <div className="text-center text-sm text-muted-foreground">
+            <p>
+              © {new Date().getFullYear()} EcoPowerHub AI. Built with ❤️ using{' '}
+              <a
+                href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(
+                  typeof window !== 'undefined' ? window.location.hostname : 'ecopowerhub.ai'
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                caffeine.ai
+              </a>
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

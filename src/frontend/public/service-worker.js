@@ -1,24 +1,21 @@
-const CACHE_VERSION = 'ecopowerhub-ai-v122.1';
-const CACHE_NAME = `${CACHE_VERSION}-static`;
-const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
-const IMAGE_CACHE = `${CACHE_VERSION}-images`;
+// Service Worker v128.1 - Enhanced caching with network-first navigation
+const CACHE_NAME = 'ecopowerhub-v128-1';
+const ASSETS_CACHE = 'ecopowerhub-assets-v128-1';
 
-const STATIC_ASSETS = [
+// Critical assets to cache on install
+const PRECACHE_URLS = [
   '/',
-  '/index.html',
-  '/manifest.json',
-  '/assets/generated/ecopowerhub-ai-logo-transparent.dim_200x200.png',
-  '/assets/generated/pwa-energy-app-icon-transparent.dim_200x200.png'
+  '/index.html'
 ];
 
-// Install event - cache static assets
+// Install event - precache critical assets
 self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Installing version:', CACHE_VERSION);
+  console.log('[Service Worker] Installing v128.1');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[Service Worker] Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
+        console.log('[Service Worker] Precaching critical assets');
+        return cache.addAll(PRECACHE_URLS);
       })
       .then(() => self.skipWaiting())
   );
@@ -26,130 +23,146 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Activating version:', CACHE_VERSION);
+  console.log('[Service Worker] Activating v128.1');
   event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames
-            .filter((cacheName) => {
-              return cacheName.startsWith('ecopowerhub-ai-') && 
-                     cacheName !== CACHE_NAME && 
-                     cacheName !== RUNTIME_CACHE &&
-                     cacheName !== IMAGE_CACHE;
-            })
-            .map((cacheName) => {
-              console.log('[Service Worker] Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
-            })
-        );
-      })
-      .then(() => self.clients.claim())
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME && cacheName !== ASSETS_CACHE) {
+            console.log('[Service Worker] Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
-// Fetch event - cache-first for images, network-first for others
+// Fetch event - network-first for navigation, cache-first for assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip cross-origin requests
-  if (url.origin !== location.origin) {
+  // Skip non-GET requests
+  if (request.method !== 'GET') {
     return;
   }
 
-  // Determine if this is an image request
-  const isImage = /\.(png|jpg|jpeg|svg|webp|gif)$/i.test(url.pathname) || 
-                  url.pathname.includes('/generated/');
+  // Skip chrome-extension and other non-http(s) requests
+  if (!url.protocol.startsWith('http')) {
+    return;
+  }
 
-  if (isImage) {
-    // Cache-first strategy for images to prevent flicker
-    event.respondWith(
-      caches.match(request)
-        .then((cachedResponse) => {
-          if (cachedResponse) {
-            console.log('[Service Worker] Serving image from cache:', request.url);
-            return cachedResponse;
-          }
-
-          // Not in cache, fetch from network
-          return fetch(request)
-            .then((response) => {
-              // Clone the response before caching
-              const responseToCache = response.clone();
-              
-              // Cache successful responses
-              if (response.status === 200) {
-                caches.open(IMAGE_CACHE)
-                  .then((cache) => {
-                    cache.put(request, responseToCache);
-                  });
-              }
-              
-              return response;
-            })
-            .catch(() => {
-              // Network failed, return a placeholder or error
-              return new Response('Image not available', {
-                status: 404,
-                statusText: 'Not Found',
-                headers: new Headers({
-                  'Content-Type': 'text/plain'
-                })
-              });
-            });
-        })
-    );
-  } else {
-    // Network-first strategy for non-image resources
+  // Network-first strategy for navigation requests (HTML pages)
+  // This ensures users always get the latest app shell and prevents black screens
+  if (request.mode === 'navigate' || request.destination === 'document') {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          // Clone the response before caching
-          const responseToCache = response.clone();
-          
-          // Cache successful responses
-          if (response.status === 200) {
-            caches.open(RUNTIME_CACHE)
-              .then((cache) => {
-                cache.put(request, responseToCache);
-              });
+          // Clone and cache the response
+          if (response && response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseClone);
+            });
           }
-          
           return response;
         })
         .catch(() => {
-          // Network failed, try cache
-          return caches.match(request)
-            .then((cachedResponse) => {
-              if (cachedResponse) {
-                console.log('[Service Worker] Serving from cache:', request.url);
-                return cachedResponse;
-              }
-              
-              // If not in cache and it's a navigation request, return index.html
-              if (request.mode === 'navigate') {
-                return caches.match('/index.html');
-              }
-              
-              // Otherwise return a basic offline response
-              return new Response('Offline - content not available', {
-                status: 503,
-                statusText: 'Service Unavailable',
-                headers: new Headers({
-                  'Content-Type': 'text/plain'
-                })
-              });
-            });
+          // Fallback to cache if network fails
+          return caches.match(request).then((cachedResponse) => {
+            return cachedResponse || caches.match('/index.html');
+          });
         })
     );
+    return;
   }
+
+  // Cache-first strategy for static assets (images, fonts, etc.)
+  if (url.pathname.startsWith('/assets/') || url.pathname.startsWith('/generated/')) {
+    event.respondWith(
+      caches.open(ASSETS_CACHE).then((cache) => {
+        return cache.match(request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return fetch(request).then((networkResponse) => {
+            // Only cache successful responses with correct content type
+            if (networkResponse && networkResponse.status === 200) {
+              const contentType = networkResponse.headers.get('content-type');
+              if (contentType && (
+                contentType.includes('image/') ||
+                contentType.includes('font/') ||
+                contentType.includes('application/font')
+              )) {
+                cache.put(request, networkResponse.clone());
+              }
+            }
+            return networkResponse;
+          });
+        });
+      })
+    );
+    return;
+  }
+
+  // Network-first for scripts and styles to ensure latest versions
+  if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          // Validate content type before caching
+          const contentType = response.headers.get('content-type');
+          if (response && response.status === 200 && contentType) {
+            const isValidJS = url.pathname.endsWith('.js') && contentType.includes('javascript');
+            const isValidCSS = url.pathname.endsWith('.css') && contentType.includes('css');
+            
+            if (isValidJS || isValidCSS) {
+              const responseClone = response.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(request, responseClone);
+              });
+            }
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+
+  // Default: network-first for everything else
+  event.respondWith(
+    fetch(request)
+      .then((response) => {
+        if (response && response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseClone);
+          });
+        }
+        return response;
+      })
+      .catch(() => {
+        return caches.match(request);
+      })
+  );
 });
 
-// Message event - handle skip waiting
+// Message event - handle cache clearing requests
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
-    console.log('[Service Worker] Skip waiting requested');
     self.skipWaiting();
+  }
+  if (event.data && event.data.type === 'CLEAR_CACHE') {
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => caches.delete(cacheName))
+        );
+      })
+    );
   }
 });

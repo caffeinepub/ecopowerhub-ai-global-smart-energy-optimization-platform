@@ -8,6 +8,8 @@ const __dirname = path.dirname(__filename);
 // Verify image assets were copied
 const distGeneratedPath = path.resolve(__dirname, 'dist/generated');
 const publicGeneratedPath = path.resolve(__dirname, 'public/generated');
+const distAssetsPath = path.resolve(__dirname, 'dist/assets');
+const distIndexPath = path.resolve(__dirname, 'dist/index.html');
 
 // Required PNG files with exact dimensions (case-sensitive)
 const REQUIRED_PNGS = [
@@ -26,7 +28,7 @@ const REQUIRED_PNGS = [
   { filename: 'scada-benefits-infographic.dim_800x500.png', width: 800, height: 500 }
 ];
 
-console.log('\nVerifying image asset copying and dimensions...\n');
+console.log('\n=== EcoPowerHub AI Production Build Verification ===\n');
 
 // Helper function to read PNG dimensions without external dependencies
 function getPNGDimensions(filePath) {
@@ -51,17 +53,113 @@ function getPNGDimensions(filePath) {
 }
 
 try {
+  // CRITICAL: Verify dist/index.html exists
+  console.log('Step 1: Verifying production HTML entry point...\n');
+  
+  if (!fs.existsSync(distIndexPath)) {
+    console.error('CRITICAL ERROR: Production index.html does not exist!');
+    console.error('Expected path: frontend/dist/index.html');
+    console.error('Actual path checked:', distIndexPath);
+    console.error('');
+    console.error('Without index.html, the IC asset canister cannot serve the app.');
+    console.error('This will result in a 404 or blank page in production.');
+    console.error('');
+    console.error('Troubleshooting steps:');
+    console.error('  1. Verify that frontend/index.html exists in the source');
+    console.error('  2. Check that vite.config.ts has correct build.rollupOptions.input');
+    console.error('  3. Ensure the Vite build command completed successfully');
+    console.error('  4. Try running: cd frontend && npm run build');
+    console.error('');
+    process.exit(1);
+  }
+  
+  console.log('Success: Production index.html exists!\n');
+  
+  // CRITICAL: Verify Vite bundle output directory exists
+  console.log('Step 2: Verifying Vite bundle output directory...\n');
+  
+  if (!fs.existsSync(distAssetsPath)) {
+    console.error('CRITICAL ERROR: Vite bundle output directory does not exist!');
+    console.error('Expected path: frontend/dist/assets/');
+    console.error('Actual path checked:', distAssetsPath);
+    console.error('');
+    console.error('This means the Vite build did not produce any JavaScript or CSS bundles.');
+    console.error('Without these bundles, the React application cannot mount and will show a black screen.');
+    console.error('');
+    console.error('Troubleshooting steps:');
+    console.error('  1. Check that vite.config.ts has correct build.outDir setting');
+    console.error('  2. Verify that the Vite build command completed successfully');
+    console.error('  3. Check for build errors in the console output above');
+    console.error('  4. Ensure frontend/src/main.tsx exists and is valid');
+    console.error('');
+    process.exit(1);
+  }
+  
+  // Count and verify bundle files
+  const bundleFiles = fs.readdirSync(distAssetsPath);
+  const jsFiles = bundleFiles.filter(f => f.endsWith('.js'));
+  const cssFiles = bundleFiles.filter(f => f.endsWith('.css'));
+  
+  console.log(`Vite bundle output (frontend/dist/assets/):`);
+  console.log(`  JavaScript bundles: ${jsFiles.length}`);
+  console.log(`  CSS bundles: ${cssFiles.length}`);
+  console.log(`  Total files: ${bundleFiles.length}`);
+  console.log('');
+  
+  if (jsFiles.length === 0) {
+    console.error('CRITICAL ERROR: No JavaScript bundles found in frontend/dist/assets/!');
+    console.error('');
+    console.error('The build produced a dist/assets/ directory but it contains no .js files.');
+    console.error('This will cause a black screen because React cannot load.');
+    console.error('');
+    console.error('Troubleshooting steps:');
+    console.error('  1. Check the Vite build logs for errors');
+    console.error('  2. Verify that frontend/src/main.tsx exists and is valid');
+    console.error('  3. Check that vite.config.ts has correct rollupOptions.input');
+    console.error('  4. Try running: cd frontend && npm run build');
+    console.error('');
+    process.exit(1);
+  }
+  
+  if (cssFiles.length === 0) {
+    console.warn('WARNING: No CSS bundles found in frontend/dist/assets/');
+    console.warn('The app may load but will have no styling.');
+    console.warn('');
+  }
+  
+  console.log('Success: Vite bundle output verified!\n');
+  
   // Check if dist/generated directory exists
+  console.log('Step 3: Verifying generated asset directories...\n');
+  
   if (!fs.existsSync(distGeneratedPath)) {
-    console.error('Error: frontend/dist/generated directory does not exist');
-    console.log('Expected path:', distGeneratedPath);
+    console.error('CRITICAL ERROR: frontend/dist/generated directory does not exist!');
+    console.error('Expected path:', distGeneratedPath);
+    console.error('');
+    console.error('Generated assets (images) are required for production.');
+    console.error('Without them, pages will show broken images and 404 errors.');
+    console.error('');
+    console.error('Troubleshooting steps:');
+    console.error('  1. Verify that frontend/public/generated exists and contains PNG files');
+    console.error('  2. Check that vite.config.ts has publicDir set to "public"');
+    console.error('  3. Ensure the Vite build copied public/ contents to dist/');
+    console.error('  4. Try running: npm run extract-assets-all');
+    console.error('');
     process.exit(1);
   }
 
   // Check if public/generated directory exists
   if (!fs.existsSync(publicGeneratedPath)) {
-    console.error('Error: frontend/public/generated directory does not exist');
-    console.log('Expected path:', publicGeneratedPath);
+    console.error('CRITICAL ERROR: frontend/public/generated directory does not exist!');
+    console.error('Expected path:', publicGeneratedPath);
+    console.error('');
+    console.error('Source assets are missing. Run asset extraction first.');
+    console.error('');
+    console.error('Troubleshooting steps:');
+    console.error('  1. Run: npm run extract-assets-all');
+    console.error('  2. Verify that scripts/copy-assets-from-storage.js exists');
+    console.error('  3. Check ASSET_EXTRACTION_GUIDE.md for details');
+    console.error('');
     process.exit(1);
   }
 
@@ -81,8 +179,16 @@ try {
   console.log(`Build output (dist/generated): ${distFiles.length} image files\n`);
 
   if (distFiles.length === 0) {
-    console.error('Error: No image assets were copied to dist/generated');
-    console.log('Tip: Ensure publicDir is set to "public" in vite.config.ts');
+    console.error('CRITICAL ERROR: No image assets were copied to dist/generated!');
+    console.error('');
+    console.error('Vite did not copy assets from public/generated to dist/generated.');
+    console.error('This will cause 404 errors for all images in production.');
+    console.error('');
+    console.error('Troubleshooting steps:');
+    console.error('  1. Ensure publicDir is set to "public" in vite.config.ts');
+    console.error('  2. Verify that frontend/public/generated contains PNG files');
+    console.error('  3. Try running: npm run extract-assets-all && cd frontend && npm run build');
+    console.error('');
     process.exit(1);
   }
 
@@ -101,7 +207,7 @@ try {
   }
 
   // Verify required PNG files with dimension validation
-  console.log('Required PNG asset verification:\n');
+  console.log('Step 4: Required PNG asset verification:\n');
   
   let hasErrors = false;
   const errors = [];
@@ -167,12 +273,14 @@ try {
       continue;
     }
     
-    console.log(`Success: ${filename} - ${expectedWidth}x${expectedHeight}px (verified in both locations)`);
+    console.log(`  Success: ${filename} - ${expectedWidth}x${expectedHeight}px (verified in both locations)`);
   }
 
   console.log('');
 
   // Verify Device Integration Guides logo assets
+  console.log('Step 5: Device Integration Guides logo verification:\n');
+  
   const deviceGuideLogos = [
     'emporia-logo-transparent.dim_150x150.png',
     'sense-logo-transparent.dim_150x150.png',
@@ -190,7 +298,6 @@ try {
     'utility-direct-integration-logo-transparent.dim_150x150.png'
   ];
 
-  console.log('Device Integration Guides logo verification:');
   let missingDeviceLogos = [];
   deviceGuideLogos.forEach(logo => {
     if (distFiles.includes(logo)) {
@@ -211,6 +318,8 @@ try {
   }
 
   // Log individual image verification for key assets
+  console.log('\nStep 6: Key asset verification:\n');
+  
   const keyAssets = [
     'hero-background-globe.dim_1920x1080.png',
     'ecopowerhub-ai-logo-transparent.dim_200x200.png',
@@ -218,7 +327,6 @@ try {
     'device-setup-cards.dim_900x500.png'
   ];
 
-  console.log('\nKey asset verification:');
   keyAssets.forEach(asset => {
     if (distFiles.includes(asset)) {
       console.log(`  Success: ${asset}`);
@@ -233,16 +341,21 @@ try {
   console.log(`Image types: PNG (${distFiles.filter(f => f.endsWith('.png')).length}), JPG (${distFiles.filter(f => f.endsWith('.jpg') || f.endsWith('.jpeg')).length}), SVG (${distFiles.filter(f => f.endsWith('.svg')).length})\n`);
 
   if (hasErrors) {
-    console.error('Build verification FAILED!\n');
+    console.error('=== Build verification FAILED! ===\n');
     console.error('Summary of errors:');
     errors.forEach((error, index) => {
       console.error(`  ${index + 1}. ${error}`);
     });
     console.error('');
+    console.error('Production deployment will fail or show broken images.');
+    console.error('Fix the errors above before deploying to production.');
+    console.error('');
     process.exit(1);
   }
 
-  console.log('Build verification complete!\n');
+  console.log('=== Build verification complete - all checks passed! ===\n');
+  console.log('Production build is ready for deployment to Internet Computer.');
+  console.log('');
 } catch (error) {
   console.error('Error during verification:', error.message);
   console.error('Stack trace:', error.stack);

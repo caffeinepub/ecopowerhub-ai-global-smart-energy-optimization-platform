@@ -1,3 +1,4 @@
+// @generated
 import AccessControl "authorization/access-control";
 import OutCall "http-outcalls/outcall";
 import Stripe "stripe/stripe";
@@ -1789,4 +1790,3 @@ actor EcoPowerHubAI {
     OutCall.transform(input);
   };
 };
-

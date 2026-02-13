@@ -1,99 +1,90 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add required generated PNG assets and enforce PNG dimension validation during build verification",
+  "title": "Fix marketing generated-asset image paths and internal navigation route mismatches",
   "requirements": [
     {
-      "id": "REQ-7",
-      "summary": "Add the required generated PNG assets under frontend/public/generated with exact filenames and dimensions so Vite publishes them to dist/generated and they are served from /generated/ at runtime.",
+      "id": "REQ-18",
+      "summary": "Serve the marketing logo from /generated and ensure the required PNG exists under frontend/public/generated so it is copied into frontend/dist/generated at build time.",
       "acceptanceCriteria": [
-        "Each listed filename exists as a real file under `frontend/public/generated/` with the exact casing and spelling.",
-        "Each listed image has the exact pixel dimensions specified in its filename (e.g., `...dim_800x600...` is exactly 800×600 px).",
-        "After `vite build`, each listed file exists under `frontend/dist/generated/` with the exact same filename.",
-        "At runtime, requesting `/generated/<filename>` returns HTTP 200 for each listed filename."
+        "The logo image in the marketing header renders (no broken image icon) on first load and after refresh.",
+        "The logo image in the marketing footer renders (no broken image icon) on first load and after refresh.",
+        "A direct request to `/generated/energyoptim-ai-logo-transparent.dim_200x200.png` returns HTTP 200 with `Content-Type: image/png` (not HTML).",
+        "`frontend/public/generated/energyoptim-ai-logo-transparent.dim_200x200.png` exists in the repository and appears in the production build output at `frontend/dist/generated/energyoptim-ai-logo-transparent.dim_200x200.png`."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/generated/hero-background-globe.dim_1920x1080.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 1920×1080 px."
+          "path": "frontend/src/components/MarketingHeader.tsx",
+          "operation": "modify",
+          "description": "Update the marketing logo <img> src to load from the generated-asset runtime directory (`/generated/energyoptim-ai-logo-transparent.dim_200x200.png`) so it matches how other generated assets are served. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/public/generated/interactive-setup-diagram.dim_900x500.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 900×500 px."
+          "path": "frontend/src/components/MarketingFooter.tsx",
+          "operation": "modify",
+          "description": "Update the marketing logo <img> src to load from the generated-asset runtime directory (`/generated/energyoptim-ai-logo-transparent.dim_200x200.png`) so header and footer use the same reliable path. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/public/generated/emporia-vue-220v-tutorial.dim_800x600.png",
+          "path": "frontend/public/generated/energyoptim-ai-logo-transparent.dim_200x200.png",
           "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×600 px."
-        },
-        {
-          "path": "frontend/public/generated/device-setup-cards.dim_900x500.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 900×500 px."
-        },
-        {
-          "path": "frontend/public/generated/ai-chatbot-interface.dim_600x400.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 600×400 px."
-        },
-        {
-          "path": "frontend/public/generated/global-faq-interface.dim_800x400.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×400 px."
-        },
-        {
-          "path": "frontend/public/generated/case-studies-savings-chart.dim_800x500.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×500 px."
-        },
-        {
-          "path": "frontend/public/generated/residential-case-study-dashboard.dim_800x600.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×600 px."
-        },
-        {
-          "path": "frontend/public/generated/commercial-energy-optimization.dim_800x600.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×600 px."
-        },
-        {
-          "path": "frontend/public/generated/industrial-energy-case-study.dim_800x600.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×600 px."
-        },
-        {
-          "path": "frontend/public/generated/testimonial-michael-avatar.dim_100x100.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 100×100 px."
-        },
-        {
-          "path": "frontend/public/generated/testimonial-sophie-avatar.dim_100x100.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 100×100 px."
-        },
-        {
-          "path": "frontend/public/generated/scada-benefits-infographic.dim_800x500.png",
-          "operation": "create",
-          "description": "Add PNG asset with exact filename and ensure the actual image is exactly 800×500 px."
+          "description": "Add the required square transparent logo PNG to the generated assets directory so it is included in the build output under frontend/dist/generated. (This must be the exact file referenced at runtime: `/generated/energyoptim-ai-logo-transparent.dim_200x200.png`.)"
         }
       ]
     },
     {
-      "id": "REQ-8",
-      "summary": "Enhance frontend/vite-build-verify.js to validate required PNG presence and pixel dimensions (parsed from dim_WIDTHxHEIGHT in filename) in both public/generated and dist/generated, failing with clear English errors.",
+      "id": "REQ-19",
+      "summary": "Fix broken internal navigation links in the marketing header/footer so they match the routes declared in frontend/src/App.tsx.",
       "acceptanceCriteria": [
-        "Running `node frontend/vite-build-verify.js` fails if any required file is missing from `frontend/public/generated` or `frontend/dist/generated`.",
-        "Running `node frontend/vite-build-verify.js` fails if any required file exists but its actual pixel dimensions do not match the `dim_WIDTHxHEIGHT` part of its filename.",
-        "Failure output is in English and identifies (a) the filename and (b) expected vs actual dimensions.",
-        "Script continues to pass when all required files exist and all dimensions match."
+        "Clicking “Partner Marketplace” from the marketing header navigates to a working page (no 404/blank page) and the URL matches an existing app route.",
+        "Clicking “Privacy” from the marketing footer navigates to a working page (no 404/blank page) and the URL matches an existing app route.",
+        "All internal `href` routes in `frontend/src/components/MarketingHeader.tsx` and `frontend/src/components/MarketingFooter.tsx` correspond to a route declared in `frontend/src/App.tsx` (or a deliberate in-page anchor)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MarketingHeader.tsx",
+          "operation": "modify",
+          "description": "Update internal navigation hrefs to match declared routes in frontend/src/App.tsx (e.g., change “Partner Marketplace” from `/marketplace` to `/partner-marketplace`, including in the mobile menu). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/MarketingFooter.tsx",
+          "operation": "modify",
+          "description": "Update the Privacy link href from `/privacy` to the routed path `/privacy-policy` as declared in frontend/src/App.tsx. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "summary": "Add build-time verification for generated PNGs referenced by the marketing header/footer so the build fails with clear errors if files are missing or dimensions are incorrect.",
+      "acceptanceCriteria": [
+        "If `frontend/public/generated/energyoptim-ai-logo-transparent.dim_200x200.png` is missing, the build verification step fails with a clear message naming the missing file and expected location.",
+        "If `energyoptim-ai-logo-transparent.dim_200x200.png` exists but does not match 200×200 pixels, the build verification step fails with a clear message naming the file and expected dimensions.",
+        "When all required generated images exist with correct dimensions, the build verification step passes."
       ],
       "file_operations": [
         {
           "path": "frontend/vite-build-verify.js",
           "operation": "modify",
-          "description": "Update the verification script to: (1) define the authoritative required PNG list (the 13 filenames from REQ-7) and require exact case-sensitive matches; (2) verify each required file exists in both frontend/public/generated and frontend/dist/generated; (3) parse expected WIDTH×HEIGHT from each filename segment dim_WIDTHxHEIGHT; (4) read actual PNG pixel dimensions (without adding external dependencies) and compare against expected; (5) exit with code 1 and clear English error messages that include filename plus expected vs actual dimensions and whether the failure is in public/generated or dist/generated; (6) ensure all logs/errors are English-only (remove emoji-only status markers where practical) while keeping output readable."
+          "description": "Extend the build verification list to include `energyoptim-ai-logo-transparent.dim_200x200.png` (200x200) and ensure failures clearly indicate missing file location (frontend/public/generated and frontend/dist/generated) and expected dimensions."
+        },
+        {
+          "path": "frontend/src/lib/assetRestoration.ts",
+          "operation": "modify",
+          "description": "Update the documented required asset list to include the marketing logo (`energyoptim-ai-logo-transparent.dim_200x200.png`, 200x200) so build-time verification requirements remain consistent with marketing header/footer usage. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "summary": "Audit prominent internal navigation links on marketing-facing pages (LandingPage CTAs and device guide buttons) to ensure they resolve to existing App routes with no broken navigation.",
+      "acceptanceCriteria": [
+        "From the landing page, the “Start Your Free Energy Audit” CTA navigates successfully to the login route.",
+        "From the landing page, “View Guide” buttons navigate successfully to the integration guides route.",
+        "No internal navigation link on the landing page results in a 404, blank screen, or route mismatch in the deployed build."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/LandingPage.tsx",
+          "operation": "modify",
+          "description": "Audit and align LandingPage internal hrefs with routes declared in frontend/src/App.tsx (confirm CTA uses `/login` and guide buttons use `/integration-guides`; fix any mismatches found). Verify the component's usage instructions before implementing."
         }
       ]
     }

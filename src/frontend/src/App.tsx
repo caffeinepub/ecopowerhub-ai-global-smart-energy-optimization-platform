@@ -104,6 +104,12 @@ const partnerMarketplaceRoute = createRoute({
   component: PartnerMarketplacePage,
 });
 
+const partnerIntegrationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/partner-integration',
+  component: PartnerMarketplacePage,
+});
+
 const privacyPolicyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/privacy-policy',
@@ -113,6 +119,13 @@ const privacyPolicyRoute = createRoute({
 const supportIntegrationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/support-integrations',
+  component: SupportIntegrationsPage,
+});
+
+// Add explicit /support route alias
+const supportRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/support',
   component: SupportIntegrationsPage,
 });
 
@@ -172,8 +185,10 @@ const routeTree = rootRoute.addChildren([
   techSpecsRoute,
   bestPracticesRoute,
   partnerMarketplaceRoute,
+  partnerIntegrationRoute,
   privacyPolicyRoute,
   supportIntegrationsRoute,
+  supportRoute,
   domainsRoute,
   complianceSecurityRoute,
   deviceIntegrationGuidesRoute,

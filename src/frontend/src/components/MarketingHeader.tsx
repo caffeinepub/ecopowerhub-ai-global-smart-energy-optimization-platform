@@ -75,7 +75,7 @@ export default function MarketingHeader() {
       <div className="container flex h-16 items-center justify-between px-4">
         <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <img 
-            src="/assets/generated/energyoptim-ai-logo-transparent.dim_200x200.png" 
+            src="/generated/energyoptim-ai-logo-transparent.dim_200x200.png" 
             alt="EcoPowerHub AI Logo" 
             className="h-10 w-10"
           />
@@ -123,7 +123,7 @@ export default function MarketingHeader() {
           <a href="/best-practices" className="text-sm font-medium hover:text-[#007BFF] transition-colors">
             Best Practices
           </a>
-          <a href="/marketplace" className="text-sm font-medium hover:text-[#007BFF] transition-colors">
+          <a href="/partner-marketplace" className="text-sm font-medium hover:text-[#007BFF] transition-colors">
             Partner Marketplace
           </a>
           <a href="/compliance-security" className="text-sm font-medium hover:text-[#007BFF] transition-colors">
@@ -236,7 +236,7 @@ export default function MarketingHeader() {
             <a href="/best-practices" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium hover:text-[#007BFF] transition-colors text-left">
               Best Practices
             </a>
-            <a href="/marketplace" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium hover:text-[#007BFF] transition-colors text-left">
+            <a href="/partner-marketplace" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium hover:text-[#007BFF] transition-colors text-left">
               Partner Marketplace
             </a>
             <a href="/compliance-security" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium hover:text-[#007BFF] transition-colors text-left">

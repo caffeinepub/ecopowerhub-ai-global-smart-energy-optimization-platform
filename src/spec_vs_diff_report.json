@@ -1,95 +1,68 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-10T07:22:36.349Z",
-  "summary": "REQ-8 appears to be implemented (at least partially) by adding required PNG metadata and a PNG dimension reader to `frontend/vite-build-verify.js`, but REQ-7 is not implemented because no PNG files were added under `frontend/public/generated/`. The diff also includes substantial unrelated frontend/UI/product changes that were not requested and go beyond the stated non-goals.",
+  "generatedAt": "2026-02-10T15:01:40.183Z",
+  "summary": "Diff updates the marketing header/footer logo <img> to use a /generated/... path and adds a centralized generatedAssetPaths.ts map. However, there is no evidence that the required PNG was added under frontend/public/generated, no evidence of build-time copying to dist, and no evidence of the requested build-time verification step for generated PNG presence/dimensions. Navigation link fixes are only partially evidenced (some footer links changed), while other required link audits are not shown.",
   "missing_requirements": [
     {
-      "id": "REQ-7",
-      "requirement": "Add the specified PNG files (exact filenames, case-sensitive) under `frontend/public/generated/` so they are served from `/generated/...` and included in `frontend/dist/generated/` after `vite build`.",
-      "reason": "The diff summary shows no added files, and there is no evidence that any of the required PNGs were added to `frontend/public/generated/`.",
+      "id": "REQ-18",
+      "requirement": "Ensure the marketing logo PNG exists under frontend/public/generated/ and is copied into frontend/dist/generated/ at build time, and is served from /generated/... reliably in header and footer.",
+      "reason": "The header/footer now reference /generated/energyoptim-ai-logo-transparent.dim_200x200.png, but the diff shows no new/added asset file under frontend/public/generated and no build/pipeline changes that ensure copying into frontend/dist/generated at build time.",
       "evidence": [
-        "File diff summary: \"Added: 0\" and \"ADDED FILES: - none\""
+        "frontend/src/components/MarketingHeader.tsx",
+        "frontend/src/components/MarketingFooter.tsx"
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "requirement": "Fix broken internal navigation links in the marketing header/footer so every internal link matches an existing route in frontend/src/App.tsx (e.g., Partner Marketplace and Privacy).",
+      "reason": "Only a subset of footer links are visible; the header is truncated and there is no evidence that 'Partner Marketplace' was updated to a valid route, nor that all header/footer internal hrefs were audited against App.tsx routes.",
+      "evidence": [
+        "frontend/src/components/MarketingFooter.tsx",
+        "frontend/src/components/MarketingHeader.tsx"
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "requirement": "Add build-time verification for all generated PNGs referenced by the marketing header/footer (including the 200x200 logo) to fail the build with clear English errors if missing or wrong dimensions.",
+      "reason": "The diff includes no build script changes (e.g., frontend/vite-build-verify.js) or any verification logic that checks existence and pixel dimensions for the referenced generated PNGs.",
+      "evidence": [
+        "frontend/src/lib/generatedAssetPaths.ts",
+        "frontend/src/components/MarketingHeader.tsx",
+        "frontend/src/components/MarketingFooter.tsx"
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "requirement": "Audit other prominent internal navigation links on marketing-facing pages (LandingPage CTAs and device guide buttons) to ensure they resolve to existing App.tsx routes.",
+      "reason": "No changes to landing page CTAs or device guide buttons are shown in the diff summary, so there is no evidence that these links were audited/fixed.",
+      "evidence": [
+        "frontend-file-summaries.txt"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Large-scale routing and page restructuring (LandingPage at `/`, LoginPage moved to `/login`, marketing pages render without layout wrappers).",
-      "reason": "Not requested; the BuildRequest is limited to restoring static PNG assets under `frontend/public/generated/` and adding build-time dimension validation.",
+      "description": "Added/expanded region and language preference handling in the MarketingHeader (localStorage persistence and CustomEvent dispatch).",
+      "reason": "BuildRequest is limited to fixing broken image asset paths and broken internal navigation links; region/language preference state and events are new functionality not requested.",
       "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/App.tsx\")"
+        "frontend/src/components/MarketingHeader.tsx"
       ]
     },
     {
-      "description": "Added/changed React Query hooks with mock implementations for unimplemented backend features.",
-      "reason": "Not requested and conflicts with non-goal of not adding new product functionality beyond restoring/validating static assets.",
+      "description": "Introduced a centralized GENERATED_ASSETS registry covering many generated images beyond the marketing header/footer logo.",
+      "reason": "REQs only ask to fix the marketing logo path and add build-time verification for generated PNGs referenced by header/footer; a broad asset registry for many other images is not explicitly requested.",
       "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/hooks/useQueries.ts\")"
-      ]
-    },
-    {
-      "description": "Header/UI branding changes (\"EcoPowerHub AI\" branding, tagline, greeting, theme toggle, mobile navigation).",
-      "reason": "Not requested; BuildRequest constraints focus on assets and verification, not UI/branding updates.",
-      "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/components/Header.tsx\")"
-      ]
-    },
-    {
-      "description": "Footer changes including new attribution and external domain link.",
-      "reason": "Not requested; outside scope of static asset restoration and verification.",
-      "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/components/Footer.tsx\")"
-      ]
-    },
-    {
-      "description": "New/changed ProfileSetupModal behavior and copy (name input, language selection, welcome messaging).",
-      "reason": "Not requested; beyond the specified asset/verification work.",
-      "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/components/ProfileSetupModal.tsx\")"
-      ]
-    },
-    {
-      "description": "LoginPage hero/marketing content changes and Internet Identity login presentation updates.",
-      "reason": "Not requested; BuildRequest does not ask for page content changes.",
-      "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/pages/LoginPage.tsx\")"
-      ]
-    },
-    {
-      "description": "Dashboard feature additions (admin-only Maintenance tab, Status button, deployment status monitoring, new tabs/components).",
-      "reason": "Not requested and constitutes new product features beyond restoring/validating static assets.",
-      "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/pages/Dashboard.tsx\")",
-        "frontend-file-summaries.txt (entries for dashboard components: OverviewTab, SystemStatusCards, EnergyChart, TemperatureGauge, SystemsTab, AddSystemDialog, RecommendationsTab, AnalyticsTab)"
-      ]
-    },
-    {
-      "description": "Analytics features including downloadable reports, copy-to-clipboard deployment URL card, DNS/SSL verification status, and live monitoring for domains.",
-      "reason": "Not requested; beyond the asset restoration/verification scope and appears to add new monitoring functionality.",
-      "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/components/dashboard/AnalyticsTab.tsx\")"
-      ]
-    },
-    {
-      "description": "Global CSS/style system updates (OKLCH theme, grid pattern background, stable-image loading transitions).",
-      "reason": "Not requested; outside the scope of adding PNGs and build verification dimension checks.",
-      "evidence": [
-        "frontend-file-summaries.txt (entry for \"frontend/src/index.css\")"
-      ]
-    },
-    {
-      "description": "Modifications to `project_state.json` describing broader scope and feature tracking unrelated to the two requested requirements.",
-      "reason": "Not requested by the BuildRequest; adds/changes project metadata and mentions additional scope (e.g., asset-canister headers) not part of REQ-7/REQ-8.",
-      "evidence": [
-        "project_state.json"
+        "frontend/src/lib/generatedAssetPaths.ts"
       ]
     }
   ],
-  "confidence": 0.78,
+  "confidence": 0.62,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/vite-build-verify.js",
+    "frontend/src/components/MarketingFooter.tsx",
+    "frontend/src/components/MarketingHeader.tsx",
+    "frontend/src/lib/generatedAssetPaths.ts",
     "project_state.json"
   ]
 }

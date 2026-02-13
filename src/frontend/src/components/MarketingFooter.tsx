@@ -17,7 +17,7 @@ export default function MarketingFooter() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <img 
-                src="/assets/generated/energyoptim-ai-logo-transparent.dim_200x200.png" 
+                src="/generated/energyoptim-ai-logo-transparent.dim_200x200.png" 
                 alt="EcoPowerHub AI Logo" 
                 className="h-10 w-10"
               />
@@ -62,7 +62,7 @@ export default function MarketingFooter() {
           <div>
             <h4 className="font-semibold mb-4 text-[#007BFF]">Legal</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="/privacy" className="hover:text-[#007BFF] transition-colors">Privacy</a></li>
+              <li><a href="/privacy-policy" className="hover:text-[#007BFF] transition-colors">Privacy</a></li>
               <li><a href="#" className="hover:text-[#007BFF] transition-colors">Terms</a></li>
               <li><a href="https://www.ecopowerhub.ai" target="_blank" rel="noopener noreferrer" className="hover:text-[#007BFF] transition-colors">www.EcoPowerHub.ai</a></li>
             </ul>
@@ -71,11 +71,11 @@ export default function MarketingFooter() {
 
         <div className="border-t border-border/40 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>© 2025 Eco PowerHub AI LLC. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Eco PowerHub AI LLC. All rights reserved.</p>
             <p className="flex items-center gap-1">
               Built with <Heart className="h-4 w-4 fill-red-500 text-red-500" /> using{' '}
               <a
-                href="https://caffeine.ai"
+                href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-[#007BFF] hover:underline"

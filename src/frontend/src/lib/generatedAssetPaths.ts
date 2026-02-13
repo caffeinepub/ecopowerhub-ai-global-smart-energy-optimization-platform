@@ -4,7 +4,8 @@
  */
 
 export const GENERATED_ASSETS = {
-  // Hero & Marketing
+  // Branding & Marketing
+  ecopowerhubLogo: '/generated/energyoptim-ai-logo-transparent.dim_200x200.png',
   heroBackgroundGlobe: '/generated/hero-background-globe.dim_1920x1080.png',
   
   // Device Integration Guides - Logos

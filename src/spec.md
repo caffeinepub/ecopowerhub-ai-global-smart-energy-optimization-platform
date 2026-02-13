@@ -1,10 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Ensure required generated PNG assets are present with exact filenames and dimensions, and enforce dimension validation during build verification.
+**Goal:** Fix broken marketing logo asset loading and eliminate broken internal navigation links across marketing-facing pages.
 
 **Planned changes:**
-- Add the specified PNG files to `frontend/public/generated/` with exact case-sensitive filenames and the exact pixel dimensions encoded in each filename.
-- Update `frontend/vite-build-verify.js` to validate both presence and actual pixel dimensions (width×height) for the required generated PNG files in `frontend/public/generated/` and `frontend/dist/generated/`, failing with clear English errors on mismatch.
+- Serve the marketing logo from the `/generated/...` runtime asset directory in both `MarketingHeader` and `MarketingFooter`, and ensure the PNG exists under `frontend/public/generated/` and is present in the production build output under `frontend/dist/generated/`.
+- Update internal navigation links in `MarketingHeader`/`MarketingFooter` so all internal paths match routes that exist in `frontend/src/App.tsx` (or are deliberate in-page anchors).
+- Add a build-time verification step that checks all generated PNGs referenced by the marketing header/footer exist at the expected location and match expected dimensions, failing the build with a clear English error when they do not.
+- Audit other prominent marketing-page internal links (at minimum: LandingPage primary CTAs and device guide buttons) and update them to navigate to existing routes declared in `frontend/src/App.tsx`.
 
-**User-visible outcome:** All required `/generated/<filename>` assets load successfully at runtime (HTTP 200), and the build verification script reliably fails if any required image is missing or has incorrect dimensions.
+**User-visible outcome:** The marketing header/footer logo consistently renders on load/refresh, and all key marketing navigation links (including CTAs and guide buttons) route to working pages without 404s or blank screens.
