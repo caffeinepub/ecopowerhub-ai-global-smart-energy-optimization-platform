@@ -5,7 +5,8 @@
 
 export const GENERATED_ASSETS = {
   // Branding & Marketing
-  ecopowerhubLogo: '/generated/energyoptim-ai-logo-transparent.dim_200x200.png',
+  ecopowerhubLogo: '/generated/ecopowerhub-ai-logo-transparent.dim_200x200.png',
+  ecopowerhubLogoFullColor1024: '/generated/ecopowerhub-logo-full-color.1024x1024.png',
   heroBackgroundGlobe: '/generated/hero-background-globe.dim_1920x1080.png',
   
   // Device Integration Guides - Logos
@@ -38,6 +39,7 @@ export const GENERATED_ASSETS = {
   generacPwrcellSetup: '/generated/generac-pwrcell-setup.dim_800x600.png',
   spanIoIntegration: '/generated/span-io-integration.dim_800x600.png',
   neochargeSetupGuide: '/generated/neocharge-setup-guide.dim_800x600.png',
+  interactiveSetupDiagram: '/generated/interactive-setup-diagram.dim_900x500.png',
   deviceSetupCards: '/generated/device-setup-cards.dim_900x500.png',
   
   // AI & Support
@@ -56,6 +58,23 @@ export const GENERATED_ASSETS = {
   
   // SCADA & Technical
   scadaBenefitsInfographic: '/generated/scada-benefits-infographic.dim_800x500.png',
+  
+  // Solar Generator Affiliate - Product Images
+  solarGeneratorEcoflowProduct: '/generated/solar-generator-ecoflow-product.dim_1200x800.png',
+  solarGeneratorEcoflowApp: '/generated/solar-generator-ecoflow-app-dashboard.dim_1200x800.png',
+  solarGeneratorBluettiProduct: '/generated/solar-generator-bluetti-product.dim_1200x800.png',
+  solarGeneratorBluettiApp: '/generated/solar-generator-bluetti-app-dashboard.dim_1200x800.png',
+  solarGeneratorJackeryProduct: '/generated/solar-generator-jackery-product.dim_1200x800.png',
+  solarGeneratorJackeryApp: '/generated/solar-generator-jackery-app-dashboard.dim_1200x800.png',
+  solarGeneratorAnkerProduct: '/generated/solar-generator-anker-product.dim_1200x800.png',
+  solarGeneratorAnkerApp: '/generated/solar-generator-anker-app-dashboard.dim_1200x800.png',
+  
+  // Affiliate Marketplace Cards
+  senseAffiliateCard: '/generated/sense-affiliate-card.dim_300x200.png',
+  emporiaAffiliateCard: '/generated/emporia-affiliate-card.dim_300x200.png',
+  amazonAssociatesCard: '/generated/amazon-associates-card.dim_300x200.png',
+  shareasaleCard: '/generated/shareasale-card.dim_300x200.png',
+  cjAffiliateCard: '/generated/cj-affiliate-card.dim_300x200.png',
 } as const;
 
 export type GeneratedAssetKey = keyof typeof GENERATED_ASSETS;

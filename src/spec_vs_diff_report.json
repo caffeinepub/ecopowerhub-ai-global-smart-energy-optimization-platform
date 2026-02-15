@@ -1,68 +1,65 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-10T15:01:40.183Z",
-  "summary": "Diff updates the marketing header/footer logo <img> to use a /generated/... path and adds a centralized generatedAssetPaths.ts map. However, there is no evidence that the required PNG was added under frontend/public/generated, no evidence of build-time copying to dist, and no evidence of the requested build-time verification step for generated PNG presence/dimensions. Navigation link fixes are only partially evidenced (some footer links changed), while other required link audits are not shown.",
+  "generatedAt": "2026-02-15T16:42:55.995Z",
+  "summary": "REQ-3 (deliver Base64 Slice 1 for the 1024x1024 transparent PNG logo asset) is not implemented in the provided diff. The diff mainly updates/introduces asset inventory/verification/restoration utilities and build verification lists, but does not add the required PNG file under `frontend/public/generated/` nor provide any Base64 slice output. Several unrequested changes add/expand asset verification/restoration infrastructure beyond the single-asset delivery request.",
   "missing_requirements": [
     {
-      "id": "REQ-18",
-      "requirement": "Ensure the marketing logo PNG exists under frontend/public/generated/ and is copied into frontend/dist/generated/ at build time, and is served from /generated/... reliably in header and footer.",
-      "reason": "The header/footer now reference /generated/energyoptim-ai-logo-transparent.dim_200x200.png, but the diff shows no new/added asset file under frontend/public/generated and no build/pipeline changes that ensure copying into frontend/dist/generated at build time.",
+      "id": "REQ-3",
+      "requirement": "Generate (or retrieve) the PNG asset `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024, transparent background) and deliver Base64 Slice 1 of the PNG payload as plain text suitable for concatenation with slices 2–4 and a single decode pass.",
+      "reason": "No PNG asset file is added under `frontend/public/generated/`, and no Base64 Slice 1 payload is provided anywhere in the diff. The changes only reference the filename in asset lists and verification scripts.",
       "evidence": [
-        "frontend/src/components/MarketingHeader.tsx",
-        "frontend/src/components/MarketingFooter.tsx"
-      ]
-    },
-    {
-      "id": "REQ-19",
-      "requirement": "Fix broken internal navigation links in the marketing header/footer so every internal link matches an existing route in frontend/src/App.tsx (e.g., Partner Marketplace and Privacy).",
-      "reason": "Only a subset of footer links are visible; the header is truncated and there is no evidence that 'Partner Marketplace' was updated to a valid route, nor that all header/footer internal hrefs were audited against App.tsx routes.",
-      "evidence": [
-        "frontend/src/components/MarketingFooter.tsx",
-        "frontend/src/components/MarketingHeader.tsx"
-      ]
-    },
-    {
-      "id": "REQ-20",
-      "requirement": "Add build-time verification for all generated PNGs referenced by the marketing header/footer (including the 200x200 logo) to fail the build with clear English errors if missing or wrong dimensions.",
-      "reason": "The diff includes no build script changes (e.g., frontend/vite-build-verify.js) or any verification logic that checks existence and pixel dimensions for the referenced generated PNGs.",
-      "evidence": [
-        "frontend/src/lib/generatedAssetPaths.ts",
-        "frontend/src/components/MarketingHeader.tsx",
-        "frontend/src/components/MarketingFooter.tsx"
-      ]
-    },
-    {
-      "id": "REQ-21",
-      "requirement": "Audit other prominent internal navigation links on marketing-facing pages (LandingPage CTAs and device guide buttons) to ensure they resolve to existing App.tsx routes.",
-      "reason": "No changes to landing page CTAs or device guide buttons are shown in the diff summary, so there is no evidence that these links were audited/fixed.",
-      "evidence": [
-        "frontend-file-summaries.txt"
+        "frontend/src/lib/assetRestoration.ts",
+        "frontend/src/lib/assetVerification.ts",
+        "frontend/restore-assets.js",
+        "frontend/vite-build-verify.js"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Added/expanded region and language preference handling in the MarketingHeader (localStorage persistence and CustomEvent dispatch).",
-      "reason": "BuildRequest is limited to fixing broken image asset paths and broken internal navigation links; region/language preference state and events are new functionality not requested.",
+      "description": "Added/expanded comprehensive asset inventory documentation (\"58 required PNG assets\") including `ecopowerhub-logo-full-color.1024x1024.png` and many unrelated assets.",
+      "reason": "BuildRequest only asks to deliver a single logo PNG (and Base64 Slice 1), not to document/track dozens of assets.",
       "evidence": [
-        "frontend/src/components/MarketingHeader.tsx"
+        "frontend/src/lib/assetRestoration.ts"
       ]
     },
     {
-      "description": "Introduced a centralized GENERATED_ASSETS registry covering many generated images beyond the marketing header/footer logo.",
-      "reason": "REQs only ask to fix the marketing logo path and add build-time verification for generated PNGs referenced by header/footer; a broad asset registry for many other images is not explicitly requested.",
+      "description": "Runtime HTTP HEAD-based asset verification listing many required assets across multiple categories.",
+      "reason": "Not requested by BuildRequest; non-goal states no UI/route/component changes beyond image asset delivery request, and no runtime verification requirement was specified.",
       "evidence": [
-        "frontend/src/lib/generatedAssetPaths.ts"
+        "frontend/src/lib/assetVerification.ts"
+      ]
+    },
+    {
+      "description": "Asset restoration Node script to ensure `frontend/public/generated/` exists and to manage/validate a complete required asset list.",
+      "reason": "Not requested; BuildRequest scope is delivering the single logo asset and Base64 slice.",
+      "evidence": [
+        "frontend/restore-assets.js"
+      ]
+    },
+    {
+      "description": "Expanded build verification script required PNG list to include the new logo and many other assets.",
+      "reason": "BuildRequest did not request changes to build verification scripts or adding large required asset inventories; only the single logo asset delivery was requested.",
+      "evidence": [
+        "frontend/vite-build-verify.js"
+      ]
+    },
+    {
+      "description": "Project state tracking updated with new_feature_requests entry AR-1 marked pending.",
+      "reason": "Not requested deliverable; BuildRequest asked for Base64 Slice 1 and the PNG asset, not metadata/state tracking changes.",
+      "evidence": [
+        "project_state.json"
       ]
     }
   ],
-  "confidence": 0.62,
+  "confidence": 0.78,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/MarketingFooter.tsx",
-    "frontend/src/components/MarketingHeader.tsx",
-    "frontend/src/lib/generatedAssetPaths.ts",
+    "frontend/restore-assets.js",
+    "frontend/src/lib/assetRestoration.ts",
+    "frontend/src/lib/assetVerification.ts",
+    "frontend/vite-build-verify.js",
     "project_state.json"
   ]
 }

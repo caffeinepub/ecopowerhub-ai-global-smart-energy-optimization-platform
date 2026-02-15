@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ImageOff } from 'lucide-react';
 
 interface StableImageProps {
   src: string;
@@ -11,7 +12,8 @@ interface StableImageProps {
 
 /**
  * StableImage component that prevents flickering during re-renders
- * by maintaining stable dimensions and avoiding transient blank states
+ * by maintaining stable dimensions and avoiding transient blank states,
+ * with graceful fallback UI when images fail to load
  */
 export function StableImage({ 
   src, 
@@ -58,40 +60,63 @@ export function StableImage({
         display: 'inline-block'
       }}
     >
-      <img
-        ref={imgRef}
-        src={imgSrc}
-        alt={alt}
-        width={width}
-        height={height}
-        onLoad={handleLoad}
-        onError={handleError}
-        className={`stable-image ${isLoaded ? 'loaded' : 'loading'} ${hasError ? 'error' : ''}`}
-        style={{
-          width: width ? `${width}px` : 'auto',
-          height: height ? `${height}px` : 'auto',
-          objectFit: 'contain',
-          display: 'block'
-        }}
-        loading="lazy"
-        decoding="async"
-      />
-      {!isLoaded && !hasError && (
+      {!hasError ? (
+        <>
+          <img
+            ref={imgRef}
+            src={imgSrc}
+            alt={alt}
+            width={width}
+            height={height}
+            onLoad={handleLoad}
+            onError={handleError}
+            className={`stable-image ${isLoaded ? 'loaded' : 'loading'}`}
+            style={{
+              width: width ? `${width}px` : 'auto',
+              height: height ? `${height}px` : 'auto',
+              objectFit: 'contain',
+              display: 'block'
+            }}
+            loading="lazy"
+            decoding="async"
+          />
+          {!isLoaded && (
+            <div 
+              className="stable-image-placeholder"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'hsl(var(--muted))',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <div className="animate-pulse text-muted-foreground text-sm">Loading...</div>
+            </div>
+          )}
+        </>
+      ) : (
         <div 
-          className="stable-image-placeholder"
+          className="stable-image-fallback"
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
             width: '100%',
             height: '100%',
             backgroundColor: 'hsl(var(--muted))',
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            gap: '0.5rem',
+            padding: '1rem',
+            borderRadius: '0.5rem'
           }}
         >
-          <div className="animate-pulse text-muted-foreground text-sm">Loading...</div>
+          <ImageOff className="h-8 w-8 text-muted-foreground/50" />
+          <p className="text-xs text-muted-foreground text-center">Image unavailable</p>
         </div>
       )}
     </div>

@@ -4,61 +4,50 @@ import { Badge } from '@/components/ui/badge';
 import { ExternalLink, DollarSign, TrendingUp, Users, Award } from 'lucide-react';
 import { GENERATED_ASSETS } from '../lib/generatedAssetPaths';
 import { StableImage } from '../components/StableImage';
+import { SolarGeneratorAffiliateSection } from '../components/affiliate/SolarGeneratorAffiliateSection';
 
 interface AffiliateProgram {
   id: string;
   name: string;
-  logoPath: string;
+  url: string;
   description: string;
-  commissionRate: string;
+  image: string;
+  commission: string;
   cookieDuration: string;
   benefits: string[];
-  signupUrl: string;
   trackingId: string;
-  category: 'energy-monitor' | 'marketplace' | 'network';
 }
 
 const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
   {
     id: 'sense',
-    name: 'Sense Energy Monitor',
-    logoPath: GENERATED_ASSETS.senseLogo,
-    description: 'AI-powered whole-home energy monitor with real-time device detection',
-    commissionRate: '8-12%',
+    name: 'Sense Affiliate Program',
+    url: 'https://sense.com/affiliates',
+    description: 'Earn commissions promoting Sense home energy monitors with real-time tracking and device detection.',
+    image: GENERATED_ASSETS.senseAffiliateCard,
+    commission: 'Up to 10%',
     cookieDuration: '30 days',
-    benefits: [
-      'High conversion rate on energy-conscious audience',
-      'Recurring commission on subscription upgrades',
-      'Exclusive partner pricing for your users',
-      'Co-marketing opportunities'
-    ],
-    signupUrl: 'https://sense.com/affiliates',
-    trackingId: 'ECOPOWERHUB_SENSE_001',
-    category: 'energy-monitor'
+    benefits: ['High conversion rates', 'Marketing materials provided', 'Dedicated support'],
+    trackingId: 'ecopowerhub-sense-001',
   },
   {
     id: 'emporia',
-    name: 'Emporia Energy',
-    logoPath: GENERATED_ASSETS.emporiaLogo,
-    description: 'Affordable whole-home energy monitoring with circuit-level insights',
-    commissionRate: '10%',
+    name: 'Emporia Vue Program',
+    url: 'https://emporiaenergy.com/pages/become-affiliate',
+    description: 'Partner with Emporia to promote Vue energy monitors compatible with 220V systems worldwide.',
+    image: GENERATED_ASSETS.emporiaAffiliateCard,
+    commission: '8-12%',
     cookieDuration: '45 days',
-    benefits: [
-      'Budget-friendly option for wider audience reach',
-      'Strong brand recognition in energy monitoring',
-      'Excellent customer support reputation',
-      'Multiple product tiers for upselling'
-    ],
-    signupUrl: 'https://emporiaenergy.com/pages/affiliate-program',
-    trackingId: 'ECOPOWERHUB_EMPORIA_001',
-    category: 'energy-monitor'
+    benefits: ['Global compatibility', 'Recurring commissions', 'Exclusive promotions'],
+    trackingId: 'ecopowerhub-emporia-001',
   },
   {
     id: 'amazon-associates',
     name: 'Amazon Associates',
-    logoPath: GENERATED_ASSETS.senseLogo,
+    url: 'https://affiliate-program.amazon.com/',
     description: 'Earn commissions on smart plugs, energy monitors, and home automation devices',
-    commissionRate: '3-10%',
+    image: GENERATED_ASSETS.amazonAssociatesCard,
+    commission: '3-10%',
     cookieDuration: '24 hours',
     benefits: [
       'Massive product catalog for all energy devices',
@@ -66,16 +55,15 @@ const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
       'Prime shipping benefits for customers',
       'Easy link generation and tracking'
     ],
-    signupUrl: 'https://affiliate-program.amazon.com/',
     trackingId: 'ecopowerhub-20',
-    category: 'marketplace'
   },
   {
     id: 'shareasale',
     name: 'ShareASale Network',
-    logoPath: GENERATED_ASSETS.senseLogo,
+    url: 'https://www.shareasale.com/info/',
     description: 'Access 100+ energy, solar, and smart home brands through one network',
-    commissionRate: '5-20%',
+    image: GENERATED_ASSETS.shareasaleCard,
+    commission: '5-20%',
     cookieDuration: 'Varies by merchant',
     benefits: [
       'Single dashboard for multiple affiliate programs',
@@ -83,16 +71,15 @@ const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
       'Reliable tracking and timely payments',
       'Dedicated affiliate support team'
     ],
-    signupUrl: 'https://www.shareasale.com/info/',
     trackingId: 'ECOPOWERHUB_SAS_001',
-    category: 'network'
   },
   {
     id: 'cj-affiliate',
     name: 'CJ Affiliate (Commission Junction)',
-    logoPath: GENERATED_ASSETS.senseLogo,
+    url: 'https://www.cj.com/advertiser-signup',
     description: 'Premium affiliate network with top solar and energy efficiency brands',
-    commissionRate: '5-25%',
+    image: GENERATED_ASSETS.cjAffiliateCard,
+    commission: '5-25%',
     cookieDuration: 'Varies by merchant',
     benefits: [
       'Access to premium solar brands (SolarEdge, Enphase)',
@@ -100,26 +87,11 @@ const AFFILIATE_PROGRAMS: AffiliateProgram[] = [
       'Deep linking tools for better conversions',
       'Global reach for international audience'
     ],
-    signupUrl: 'https://www.cj.com/advertiser-signup',
     trackingId: 'ECOPOWERHUB_CJ_001',
-    category: 'network'
   }
 ];
 
 export default function PartnerMarketplacePage() {
-  const getCategoryBadgeColor = (category: AffiliateProgram['category']) => {
-    switch (category) {
-      case 'energy-monitor':
-        return 'bg-blue-500';
-      case 'marketplace':
-        return 'bg-purple-500';
-      case 'network':
-        return 'bg-green-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -150,21 +122,32 @@ export default function PartnerMarketplacePage() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Solar Generator Section - NEW */}
+        <SolarGeneratorAffiliateSection />
+
+        {/* Divider */}
+        <div className="my-16 border-t" />
+
+        {/* Original Affiliate Programs Section */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold mb-4">Energy Monitoring & Network Partners</h2>
+          <p className="text-muted-foreground mb-8">
+            Additional affiliate opportunities for energy monitors and affiliate networks
+          </p>
+        </div>
+
         {/* Affiliate Programs Grid */}
         <div className="grid md:grid-cols-2 gap-6 mb-12">
           {AFFILIATE_PROGRAMS.map((program) => (
             <Card key={program.id} className="overflow-hidden hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="flex items-start justify-between mb-4">
+                <div className="mb-4">
                   <StableImage
-                    src={program.logoPath}
-                    alt={`${program.name} logo`}
-                    className="w-20 h-20 object-contain"
-                    fallbackSrc={GENERATED_ASSETS.senseLogo}
+                    src={program.image}
+                    alt={`${program.name} card`}
+                    className="w-full h-40 object-cover rounded-lg"
+                    fallbackSrc={GENERATED_ASSETS.senseAffiliateCard}
                   />
-                  <Badge className={getCategoryBadgeColor(program.category)}>
-                    {program.category.replace('-', ' ')}
-                  </Badge>
                 </div>
                 <CardTitle className="text-2xl mb-2">{program.name}</CardTitle>
                 <CardDescription className="text-base">
@@ -176,7 +159,7 @@ export default function PartnerMarketplacePage() {
                 <div className="grid grid-cols-2 gap-4 p-4 bg-muted/50 rounded-lg">
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Commission Rate</p>
-                    <p className="text-xl font-bold text-green-600">{program.commissionRate}</p>
+                    <p className="text-xl font-bold text-green-600">{program.commission}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Cookie Duration</p>
@@ -208,8 +191,8 @@ export default function PartnerMarketplacePage() {
 
                 {/* Sign Up Button */}
                 <Button className="w-full" size="lg" asChild>
-                  <a href={program.signupUrl} target="_blank" rel="noopener noreferrer">
-                    Join {program.name} Program
+                  <a href={program.url} target="_blank" rel="noopener noreferrer">
+                    Join {program.name}
                     <ExternalLink className="ml-2 h-4 w-4" />
                   </a>
                 </Button>

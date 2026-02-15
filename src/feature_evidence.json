@@ -2,11 +2,13 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-fix-the-marketing-logo-image-so-it-loads-reliably-in-both-the-marketingheader-and-marketingfooter-by-serving-it-from-the-same-runtime-directory-used-for-other-generated-assets-generated-and-ensuring-the-corresponding-png-exists-under-frontend-public-generated-and-is-copied-into-frontend-dist-generated-at-build-time",
-      "featureTitle": "Fix the marketing logo image so it loads reliably in both the MarketingHeader and MarketingFooter by serving it from the same runtime directory used for other generated assets (`/generated/...`) and ensuring the corresponding PNG exists under `frontend/public/generated/` and is copied into `frontend/dist/generated/` at build time.",
+      "featureId": "feature-generate-or-retrieve-the-png-asset-ecopowerhub-logo-full-color-1024x1024-png-1024-1024-transparent-background-matching-the-ecopowerhub-ai-futuristic-blue-green-energy-orb-emblem-style-and-deliver-base64-slice-1-of-the-png-payload-as-plain-text-suitable-for-concatenation-with-slices-2-4-and-a-single-decode-pass",
+      "featureTitle": "Generate (or retrieve) the PNG asset `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024, transparent background) matching the EcoPowerHub AI futuristic blue/green energy-orb emblem style, and deliver **Base64 Slice 1** of the PNG payload as plain text suitable for concatenation with slices 2–4 and a single decode pass.",
       "files": [
-        "frontend/src/components/MarketingFooter.tsx",
-        "frontend/src/components/MarketingHeader.tsx"
+        "frontend/restore-assets.js",
+        "frontend/src/lib/assetRestoration.ts",
+        "frontend/src/lib/assetVerification.ts",
+        "frontend/vite-build-verify.js"
       ],
       "components": [
         "authorization@1.0.1",
@@ -20,30 +22,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-18"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-fix-broken-internal-navigation-links-in-the-marketing-header-footer-so-every-internal-link-points-to-a-route-that-exists-in-frontend-src-app-tsx-e-g-update-any-mismatched-paths-like-marketplace-and-privacy-to-the-correct-routed-paths",
-      "featureTitle": "Fix broken internal navigation links in the marketing header/footer so every internal link points to a route that exists in `frontend/src/App.tsx` (e.g., update any mismatched paths like `/marketplace` and `/privacy` to the correct routed paths).",
-      "files": [
-        "frontend/src/components/MarketingFooter.tsx",
-        "frontend/src/components/MarketingHeader.tsx"
-      ],
-      "components": [
-        "authorization@1.0.1",
-        "http-outcalls@1.1.1",
-        "blob-storage@2.0.3",
-        "stripe@1.0.1",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-19"
+        "REQ-3"
       ],
       "confidence": "high"
     }

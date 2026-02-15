@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Moon, Sun, LogOut, Menu } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { GENERATED_ASSETS } from '@/lib/generatedAssetPaths';
 
 export default function Header() {
   const { clear, identity } = useInternetIdentity();
@@ -22,7 +23,7 @@ export default function Header() {
       <div className="container flex h-14 sm:h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <img 
-            src="/assets/generated/ecopowerhub-ai-logo-transparent.dim_200x200.png" 
+            src={GENERATED_ASSETS.ecopowerhubLogo}
             alt="EcoPowerHub AI" 
             className="h-8 w-8 sm:h-10 sm:w-10"
           />

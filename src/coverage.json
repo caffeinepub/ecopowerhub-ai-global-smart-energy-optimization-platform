@@ -1,60 +1,32 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-10T15:01:40.187Z",
+  "generatedAt": "2026-02-15T16:42:55.998Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
-    "implemented": 2,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-18",
-        "summary": "Fix the marketing logo image so it loads reliably in both the MarketingHeader and MarketingFooter by serving it from the same runtime directory used for other generated assets (`/generated/...`) and ensuring the corresponding PNG exists under `frontend/public/generated/` and is copied into `frontend/dist/generated/` at build time.",
+        "id": "REQ-3",
+        "summary": "Generate (or retrieve) the PNG asset `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024, transparent background) matching the EcoPowerHub AI futuristic blue/green energy-orb emblem style, and deliver **Base64 Slice 1** of the PNG payload as plain text suitable for concatenation with slices 2–4 and a single decode pass.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/MarketingHeader.tsx",
-          "frontend/src/components/MarketingFooter.tsx",
-          "frontend/public/generated/energyoptim-ai-logo-transparent.dim_200x200.png"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/MarketingHeader.tsx",
-          "frontend/src/components/MarketingFooter.tsx"
-        ]
-      },
-      {
-        "id": "REQ-19",
-        "summary": "Fix broken internal navigation links in the marketing header/footer so every internal link points to a route that exists in `frontend/src/App.tsx` (e.g., update any mismatched paths like `/marketplace` and `/privacy` to the correct routed paths).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/MarketingHeader.tsx",
-          "frontend/src/components/MarketingFooter.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/MarketingHeader.tsx",
-          "frontend/src/components/MarketingFooter.tsx"
-        ]
-      },
-      {
-        "id": "REQ-20",
-        "summary": "Add build-time verification for all generated PNGs referenced by the marketing header/footer (including `energyoptim-ai-logo-transparent.dim_200x200.png`) so the build fails with a clear English error if any referenced generated image file is missing or has incorrect dimensions.",
-        "status": "missing",
-        "plannedFiles": [
+          "frontend/public/generated/ecopowerhub-logo-full-color.1024x1024.png",
           "frontend/vite-build-verify.js",
-          "frontend/src/lib/assetRestoration.ts"
+          "frontend/restore-assets.js",
+          "frontend/src/lib/assetRestoration.ts",
+          "frontend/src/lib/assetVerification.ts"
         ],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-21",
-        "summary": "Audit other prominent internal navigation links in marketing-facing pages (at minimum: LandingPage primary CTAs and device guide buttons) and ensure all internal links resolve to existing routes declared in `frontend/src/App.tsx` with no broken navigation in the deployed build.",
-        "status": "missing",
-        "plannedFiles": [
-          "frontend/src/pages/LandingPage.tsx"
-        ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/vite-build-verify.js",
+          "frontend/restore-assets.js",
+          "frontend/src/lib/assetRestoration.ts",
+          "frontend/src/lib/assetVerification.ts"
+        ]
       }
     ]
   },
@@ -63,10 +35,11 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/energyoptim-ai-logo-transparent.dim_200x200.png",
-    "frontend/src/components/MarketingFooter.tsx",
-    "frontend/src/components/MarketingHeader.tsx",
-    "frontend/src/lib/generatedAssetPaths.ts",
+    "frontend/public/assets/generated/ecopowerhub-logo-full-color.1024x1024.png, 1024x1024",
+    "frontend/restore-assets.js",
+    "frontend/src/lib/assetRestoration.ts",
+    "frontend/src/lib/assetVerification.ts",
+    "frontend/vite-build-verify.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
