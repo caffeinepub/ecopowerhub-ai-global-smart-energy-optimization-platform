@@ -1770,8 +1770,13 @@ actor EcoPowerHubAI {
     };
   };
 
-  public func getStripeSessionStatus(sessionId : Text) : async Stripe.StripeSessionStatus {
-    // Public access for session status checking (needed for payment verification)
+  public shared ({ caller }) func getStripeSessionStatus(sessionId : Text) : async Stripe.StripeSessionStatus {
+    if (Principal.isAnonymous(caller)) {
+      Debug.trap("Unauthorized: Anonymous principal not allowed");
+    };
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can check session status");
+    };
     await Stripe.getSessionStatus(getStripeConfiguration(), sessionId, transform);
   };
 
@@ -1789,4 +1794,6 @@ actor EcoPowerHubAI {
     // Public access for HTTP outcall transformation
     OutCall.transform(input);
   };
+
 };
+

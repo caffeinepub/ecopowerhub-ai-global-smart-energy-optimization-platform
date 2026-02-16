@@ -1,41 +1,37 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "EcoPowerHub AI full-color emblem logo asset (Base64 Slice 1 delivery)",
+  "title": "Switch app and marketing headers to new monochrome logo assets",
   "requirements": [
     {
-      "id": "REQ-3",
-      "summary": "Add the required 1024×1024 transparent PNG logo asset and update asset verification lists so it is tracked by build/runtime checks; prepare Base64 Slice 1 output from the exact PNG payload.",
+      "id": "REQ-1",
+      "summary": "Update authenticated app header to use new monochrome logos with theme-aware src, correct alt text, and 80px rendered height.",
       "acceptanceCriteria": [
-        "The delivered content is Base64 text for Slice 1 only (no markdown code fences, no extra whitespace/prefix/suffix characters).",
-        "The slice corresponds to the PNG file named exactly `ecopowerhub-logo-full-color.1024x1024.png` with dimensions exactly 1024×1024 and an alpha channel (transparent background).",
-        "Slice 1 is provided in a way that can be concatenated with subsequent slices (2–4) in order to successfully decode into a valid PNG file."
+        "In `frontend/src/components/Header.tsx`, the header logo `<img>` uses `src=\"/logo-mono-white.png\"` when the resolved theme is light and `src=\"/logo-mono-dark.png\"` when the resolved theme is dark.",
+        "The logo is displayed at 80px height and preserves aspect ratio (width auto).",
+        "The light-mode logo `alt` text is exactly \"EcoPowerHub AI\" and the dark-mode logo `alt` text is exactly \"EcoPowerHub AI (dark)\"."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/generated/ecopowerhub-logo-full-color.1024x1024.png",
-          "operation": "create",
-          "description": "Create the full-color EcoPowerHub AI emblem logo PNG (1024×1024) with transparent background (alpha) matching the futuristic blue/green energy-orb + circuit ring + curved “EcoPowerHub AI” bottom-arc text style. This file must be the exact source for Base64 Slice 1 generation and must be saved at this exact path/filename."
-        },
-        {
-          "path": "frontend/vite-build-verify.js",
+          "path": "frontend/src/components/Header.tsx",
           "operation": "modify",
-          "description": "Include `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024) in the required generated asset verification list so the production build check validates its presence and exact dimensions."
-        },
+          "description": "Adjust the header logo rendering to (1) select `/logo-mono-white.png` vs `/logo-mono-dark.png` based on `resolvedTheme`, (2) set `alt` to exactly `EcoPowerHub AI` in light mode and `EcoPowerHub AI (dark)` in dark mode, and (3) render the logo at 80px height with automatic width (preserve aspect ratio). If needed to avoid clipping, update the header container sizing to accommodate an 80px-tall logo without overflow."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Update marketing header to use new monochrome logos with theme-aware src, correct alt text, and 80px rendered height.",
+      "acceptanceCriteria": [
+        "In `frontend/src/components/MarketingHeader.tsx`, the logo `<img>` uses `/logo-mono-white.png` in light mode and `/logo-mono-dark.png` in dark mode (using existing theme logic).",
+        "The marketing header logo is displayed at 80px height and preserves aspect ratio (width auto).",
+        "The rendered logo `alt` text matches the same strings as the app header: \"EcoPowerHub AI\" (light) and \"EcoPowerHub AI (dark)\" (dark)."
+      ],
+      "file_operations": [
         {
-          "path": "frontend/restore-assets.js",
+          "path": "frontend/src/components/MarketingHeader.tsx",
           "operation": "modify",
-          "description": "Include `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024) in the asset restoration/validation list so local verification catches missing/incorrect logo assets early."
-        },
-        {
-          "path": "frontend/src/lib/assetRestoration.ts",
-          "operation": "modify",
-          "description": "Add `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024) to the documented required asset inventory to keep the generated-assets contract in sync with verification scripts."
-        },
-        {
-          "path": "frontend/src/lib/assetVerification.ts",
-          "operation": "modify",
-          "description": "Add `/generated/ecopowerhub-logo-full-color.1024x1024.png` to runtime asset verification lists so the app’s asset accessibility checks include the new logo."
+          "description": "Replace the current marketing logo `<img>` with a theme-aware logo that uses `/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode (prefer `resolvedTheme` from the existing `next-themes` hook to handle `system`). Set `alt` to exactly `EcoPowerHub AI` (light) and `EcoPowerHub AI (dark)` (dark). Render the logo at 80px height with automatic width (preserve aspect ratio), and adjust header layout sizing if required to prevent clipping."
         }
       ]
     }

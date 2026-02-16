@@ -1,31 +1,35 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T16:42:55.998Z",
+  "generatedAt": "2026-02-16T02:16:55.342Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-3",
-        "summary": "Generate (or retrieve) the PNG asset `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024, transparent background) matching the EcoPowerHub AI futuristic blue/green energy-orb emblem style, and deliver **Base64 Slice 1** of the PNG payload as plain text suitable for concatenation with slices 2–4 and a single decode pass.",
+        "id": "REQ-1",
+        "summary": "Update the authenticated app header logo to use the new monochrome logo files in `frontend/public` (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode), and set the rendered logo height to 80px with automatic width.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/public/generated/ecopowerhub-logo-full-color.1024x1024.png",
-          "frontend/vite-build-verify.js",
-          "frontend/restore-assets.js",
-          "frontend/src/lib/assetRestoration.ts",
-          "frontend/src/lib/assetVerification.ts"
+          "frontend/src/components/Header.tsx"
         ],
         "matchedFiles": [
-          "frontend/vite-build-verify.js",
-          "frontend/restore-assets.js",
-          "frontend/src/lib/assetRestoration.ts",
-          "frontend/src/lib/assetVerification.ts"
+          "frontend/src/components/Header.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Update the marketing site header logo to use the same new monochrome logo files (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode) with a height of 80px and automatic width.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/MarketingHeader.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/MarketingHeader.tsx"
         ]
       }
     ]
@@ -35,11 +39,8 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/ecopowerhub-logo-full-color.1024x1024.png, 1024x1024",
-    "frontend/restore-assets.js",
-    "frontend/src/lib/assetRestoration.ts",
-    "frontend/src/lib/assetVerification.ts",
-    "frontend/vite-build-verify.js",
+    "frontend/src/components/Header.tsx",
+    "frontend/src/components/MarketingHeader.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

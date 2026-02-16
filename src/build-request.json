@@ -1,49 +1,56 @@
 {
   "kind": "build_request",
-  "title": "Deliver Base64 Slice 1 for EcoPowerHub AI full-color emblem logo",
+  "title": "Update site headers to use new monochrome logo assets",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-3",
-      "text": "Generate (or retrieve) the PNG asset `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024, transparent background) matching the EcoPowerHub AI futuristic blue/green energy-orb emblem style, and deliver **Base64 Slice 1** of the PNG payload as plain text suitable for concatenation with slices 2–4 and a single decode pass.",
+      "id": "REQ-1",
+      "text": "Update the authenticated app header logo to use the new monochrome logo files in `frontend/public` (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode), and set the rendered logo height to 80px with automatic width.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-2"
         ],
         "quotes": [
-          "Send Slice 1"
+          "Make the site actually use the new logos… replace the current <img> with one (or both) of these… src=\"/logo-mono-white.png\" … src=\"/logo-mono-dark.png\" … style={{ height: \"80px\", width: \"auto\" }}"
         ]
       },
       "acceptanceCriteria": [
-        "The delivered content is Base64 text for Slice 1 only (no markdown code fences, no extra whitespace/prefix/suffix characters).",
-        "The slice corresponds to the PNG file named exactly `ecopowerhub-logo-full-color.1024x1024.png` with dimensions exactly 1024×1024 and an alpha channel (transparent background).",
-        "Slice 1 is provided in a way that can be concatenated with subsequent slices (2–4) in order to successfully decode into a valid PNG file."
+        "In `frontend/src/components/Header.tsx`, the header logo `<img>` uses `src=\"/logo-mono-white.png\"` when the resolved theme is light and `src=\"/logo-mono-dark.png\"` when the resolved theme is dark.",
+        "The logo is displayed at 80px height and preserves aspect ratio (width auto).",
+        "The light-mode logo `alt` text is exactly \"EcoPowerHub AI\" and the dark-mode logo `alt` text is exactly \"EcoPowerHub AI (dark)\"."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update the marketing site header logo to use the same new monochrome logo files (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode) with a height of 80px and automatic width.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Open src/App.tsx (or wherever your header/logo lives) and replace the current <img> with one (or both) of these… src=\"/logo-mono-white.png\" … src=\"/logo-mono-dark.png\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "In `frontend/src/components/MarketingHeader.tsx`, the logo `<img>` uses `/logo-mono-white.png` in light mode and `/logo-mono-dark.png` in dark mode (using existing theme logic).",
+        "The marketing header logo is displayed at 80px height and preserves aspect ratio (width auto).",
+        "The rendered logo `alt` text matches the same strings as the app header: \"EcoPowerHub AI\" (light) and \"EcoPowerHub AI (dark)\" (dark)."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under `frontend/src/components/ui` or the immutable hook files listed in SYSTEM_CONTEXT.",
-    "Asset filenames and dimensions must match exactly as required by the build verification scripts; the logo must be saved under `frontend/public/generated/` as `ecopowerhub-logo-full-color.1024x1024.png`."
+    "Do not edit any files under `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`, or `frontend/src/components/ui` (compose existing components instead).",
+    "Do not introduce new authentication providers; Internet Identity remains the only auth method."
   ],
   "nonGoals": [
-    "No backend (Motoko) changes.",
-    "No UI/route/component changes beyond the image asset delivery request."
+    "Regenerate or visually enhance the logo PNGs (no ImageMagick/logo v2 work in this change).",
+    "Fix or replace corrupted full-color logo assets (e.g., `logo-main.png`).",
+    "Add new theme system behavior beyond selecting the correct logo for the already-existing light/dark theme resolution."
   ],
   "imageRequirements": {
-    "required": [
-      "Full-color round emblem logo with transparent background; futuristic green/blue energy orb with a circuit ring and curved “EcoPowerHub AI” text along the bottom arc; sharp high-tech edges (ecopowerhub-logo-full-color.1024x1024.png, 1024x1024)"
-    ],
+    "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

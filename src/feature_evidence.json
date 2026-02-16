@@ -2,13 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-generate-or-retrieve-the-png-asset-ecopowerhub-logo-full-color-1024x1024-png-1024-1024-transparent-background-matching-the-ecopowerhub-ai-futuristic-blue-green-energy-orb-emblem-style-and-deliver-base64-slice-1-of-the-png-payload-as-plain-text-suitable-for-concatenation-with-slices-2-4-and-a-single-decode-pass",
-      "featureTitle": "Generate (or retrieve) the PNG asset `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024, transparent background) matching the EcoPowerHub AI futuristic blue/green energy-orb emblem style, and deliver **Base64 Slice 1** of the PNG payload as plain text suitable for concatenation with slices 2–4 and a single decode pass.",
+      "featureId": "feature-update-the-authenticated-app-header-logo-to-use-the-new-monochrome-logo-files-in-frontend-public-logo-mono-white-png-for-light-mode-and-logo-mono-dark-png-for-dark-mode-and-set-the-rendered-logo-height-to-80px-with-automatic-width",
+      "featureTitle": "Update the authenticated app header logo to use the new monochrome logo files in `frontend/public` (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode), and set the rendered logo height to 80px with automatic width.",
       "files": [
-        "frontend/restore-assets.js",
-        "frontend/src/lib/assetRestoration.ts",
-        "frontend/src/lib/assetVerification.ts",
-        "frontend/vite-build-verify.js"
+        "frontend/src/components/Header.tsx"
       ],
       "components": [
         "authorization@1.0.1",
@@ -22,7 +19,29 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-3"
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-marketing-site-header-logo-to-use-the-same-new-monochrome-logo-files-logo-mono-white-png-for-light-mode-and-logo-mono-dark-png-for-dark-mode-with-a-height-of-80px-and-automatic-width",
+      "featureTitle": "Update the marketing site header logo to use the same new monochrome logo files (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode) with a height of 80px and automatic width.",
+      "files": [
+        "frontend/src/components/MarketingHeader.tsx"
+      ],
+      "components": [
+        "authorization@1.0.1",
+        "http-outcalls@1.1.1",
+        "blob-storage@2.0.3",
+        "stripe@1.0.1",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
       ],
       "confidence": "high"
     }

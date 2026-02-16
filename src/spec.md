@@ -1,10 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Provide Base64 Slice 1 for the EcoPowerHub AI full-color emblem logo PNG asset.
+**Goal:** Update both the authenticated app header and the marketing site header to use the new monochrome logo assets, switching correctly for light/dark theme.
 
 **Planned changes:**
-- Generate or retrieve `frontend/public/generated/ecopowerhub-logo-full-color.1024x1024.png` (1024×1024, transparent background) matching the EcoPowerHub AI futuristic blue/green energy-orb emblem style.
-- Output Base64 Slice 1 of the PNG payload as plain text suitable for concatenation with slices 2–4 and a single decode pass.
+- Update `frontend/src/components/Header.tsx` to render `/logo-mono-white.png` in light mode and `/logo-mono-dark.png` in dark mode, with logo height set to 80px and width auto, and exact alt text per theme.
+- Update `frontend/src/components/MarketingHeader.tsx` to use the same light/dark logo selection, 80px height with width auto, and matching alt text strings.
 
-**User-visible outcome:** The user receives Base64 Slice 1 text that can be concatenated with the remaining slices to decode into the required `ecopowerhub-logo-full-color.1024x1024.png` image.
+**User-visible outcome:** The header logo on both the marketing site and the authenticated app displays the correct monochrome logo for the current light/dark theme at a consistent 80px height.

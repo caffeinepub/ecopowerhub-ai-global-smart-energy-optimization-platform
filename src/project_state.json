@@ -1,23 +1,50 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Full-color round emblem logo with transparent background; futuristic green/blue energy orb with a circuit ring and curved “EcoPowerHub AI” text along the bottom arc; sharp high-tech edges (ecopowerhub-logo-full-color.1024x1024.png, 1024x1024)",
+  "summary": "EcoPowerHub AI frontend (Vite/React) deployed to an Internet Computer asset canister; current work focuses on fixing/replacing corrupted full-color logo assets and updating the site header to use newly generated monochrome logos.",
+  "architectural_notes": [
+    "Frontend is built with Vite and deployed to IC asset canister ecopowerhub_ai_assets (iovu4-biaaa-aaaam-qevxq-cai) accessible via https://iovu4-biaaa-aaaam-qevxq-cai.icp0.io/.",
+    "Static assets in frontend/public are served from the site root (e.g., public/logo-mono-white.png -> /logo-mono-white.png).",
+    "Logo assets are being generated/validated in WSL using ImageMagick (convert) and pngcheck before redeploy."
+  ],
+  "known_issues": [
+    "logo-main.png (and decodes from logo-main-base64.txt) fails pngcheck with IHDR CRC error; ImageMagick cannot read it, blocking derivative logo generation from that source.",
+    "dfx deploy warns that no asset security policy is defined; .ic-assets.json5 should define a security_policy (or explicitly disable the warning)."
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-generate-or-retrieve-the-png-asset-ecopowerhub-logo-full-color-1024x1024-png-1024-1024-transparent-background-matching-the-ecopowerhub-ai-futuristic-blue-green-energy-orb-emblem-style-and-deliver-base64-slice-1-of-the-png-payload-as-plain-text-suitable-for-concatenation-with-slices-2-4-and-a-single-decode-pass",
-      "title": "Generate (or retrieve) the PNG asset `ecopowerhub-logo-full-color.1024x1024.png` (1024×1024, transparent background) matching the EcoPowerHub AI futuristic blue/green energy-orb emblem style, and deliver **Base64 Slice 1** of the PNG payload as plain text suitable for concatenation with slices 2–4 and a single decode pass.",
+      "id": "feature-update-the-authenticated-app-header-logo-to-use-the-new-monochrome-logo-files-in-frontend-public-logo-mono-white-png-for-light-mode-and-logo-mono-dark-png-for-dark-mode-and-set-the-rendered-logo-height-to-80px-with-automatic-width",
+      "title": "Update the authenticated app header logo to use the new monochrome logo files in `frontend/public` (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode), and set the rendered logo height to 80px with automatic width.",
       "reqIds": [
-        "REQ-3"
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-marketing-site-header-logo-to-use-the-same-new-monochrome-logo-files-logo-mono-white-png-for-light-mode-and-logo-mono-dark-png-for-dark-mode-with-a-height-of-80px-and-automatic-width",
+      "title": "Update the marketing site header logo to use the same new monochrome logo files (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode) with a height of 80px and automatic width.",
+      "reqIds": [
+        "REQ-2"
       ],
       "version": 1
     }
   ],
-  "new_feature_requests": [],
-  "projectName": "Deliver Base64 Slice 1 for EcoPowerHub AI full-color emblem logo",
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Update App.tsx/header to use new monochrome logo assets from /public (e.g., /logo-mono-white.png and /logo-mono-dark.png), optionally supporting light/dark mode selection.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Improve/regenerate monochrome logo variants (v2) to better match original design (rings/text/spacing) using ImageMagick pipeline and deploy updated assets.",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "EcoPowerHub AI",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

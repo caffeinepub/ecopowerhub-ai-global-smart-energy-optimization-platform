@@ -7,6 +7,9 @@ export const GENERATED_ASSETS = {
   // Branding & Marketing
   ecopowerhubLogo: '/generated/ecopowerhub-ai-logo-transparent.dim_200x200.png',
   ecopowerhubLogoFullColor1024: '/generated/ecopowerhub-logo-full-color.1024x1024.png',
+  ecopowerhubLogoFullColorAssets: '/assets/generated/ecopowerhub-logo-full-color.1024x1024.dim_1024x1024.png',
+  ecopowerhubLogoMonoDark: '/logo-mono-dark.png',
+  ecopowerhubLogoMonoWhite: '/logo-mono-white.png',
   heroBackgroundGlobe: '/generated/hero-background-globe.dim_1920x1080.png',
   
   // Device Integration Guides - Logos

@@ -37,7 +37,7 @@ const LANGUAGES = [
 ];
 
 export default function MarketingHeader() {
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState('north-america');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
@@ -70,14 +70,25 @@ export default function MarketingHeader() {
     window.dispatchEvent(new CustomEvent('languageChange', { detail: language }));
   };
 
+  // Use resolvedTheme to handle 'system' theme correctly
+  // Light mode uses white logo (black elements), dark mode uses dark logo (white elements)
+  const logoSrc = resolvedTheme === 'dark' 
+    ? '/logo-mono-dark.png' 
+    : '/logo-mono-white.png';
+  
+  const logoAlt = resolvedTheme === 'dark'
+    ? 'EcoPowerHub AI (dark)'
+    : 'EcoPowerHub AI';
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between px-4">
-        <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+      <div className="container flex h-24 items-center justify-between px-4">
+        <a href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img 
-            src="/generated/energyoptim-ai-logo-transparent.dim_200x200.png" 
-            alt="EcoPowerHub AI Logo" 
-            className="h-10 w-10"
+            src={logoSrc}
+            alt={logoAlt}
+            style={{ height: '80px', width: 'auto' }}
+            className="object-contain"
           />
           <div>
             <h1 className="text-xl font-bold tracking-tight">EcoPowerHub AI</h1>

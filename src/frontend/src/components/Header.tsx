@@ -5,27 +5,44 @@ import { Button } from '@/components/ui/button';
 import { Moon, Sun, LogOut, Menu } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { GENERATED_ASSETS } from '@/lib/generatedAssetPaths';
 
 export default function Header() {
   const { clear, identity } = useInternetIdentity();
   const { data: userProfile } = useGetCallerUserProfile();
   const queryClient = useQueryClient();
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
 
   const handleLogout = async () => {
     await clear();
     queryClient.clear();
   };
 
+  // Use resolvedTheme to handle 'system' theme correctly
+  // resolvedTheme will be 'light' or 'dark' based on actual OS preference
+  // Light mode uses white logo (black elements), dark mode uses dark logo (white elements)
+  const logoSrc = resolvedTheme === 'dark' 
+    ? '/logo-mono-dark.png' 
+    : '/logo-mono-white.png';
+  
+  const logoAlt = resolvedTheme === 'dark'
+    ? 'EcoPowerHub AI (dark)'
+    : 'EcoPowerHub AI';
+
+  // Toggle theme based on resolved theme for consistent behavior
+  const handleThemeToggle = () => {
+    const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 sm:h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-2">
+      <div className="container flex h-20 sm:h-24 items-center justify-between px-4">
+        <div className="flex items-center gap-3">
           <img 
-            src={GENERATED_ASSETS.ecopowerhubLogo}
-            alt="EcoPowerHub AI" 
-            className="h-8 w-8 sm:h-10 sm:w-10"
+            src={logoSrc}
+            alt={logoAlt}
+            style={{ height: '80px', width: 'auto' }}
+            className="object-contain"
           />
           <div>
             <h1 className="text-base sm:text-xl font-bold tracking-tight">EcoPowerHub AI</h1>
@@ -46,7 +63,7 @@ export default function Header() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={handleThemeToggle}
           >
             <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -64,7 +81,7 @@ export default function Header() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={handleThemeToggle}
           >
             <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
