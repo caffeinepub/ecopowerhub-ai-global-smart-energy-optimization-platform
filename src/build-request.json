@@ -1,56 +1,83 @@
 {
   "kind": "build_request",
-  "title": "Update site headers to use new monochrome logo assets",
-  "priority": "normal",
+  "title": "Switch to hash-based routing for ICP static hosting and fix Vite base path",
+  "projectName": "EcoPowerHub AI",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the authenticated app header logo to use the new monochrome logo files in `frontend/public` (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode), and set the rendered logo height to 80px with automatic width.",
+      "text": "Update the frontend routing to use hash-based URLs (e.g., /#/dashboard) so page refreshes and deep-links work on ICP asset canisters without server-side rewrites. Implement this using the existing TanStack Router setup (not react-router-dom), configuring the router to use hash history.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "Make the site actually use the new logos… replace the current <img> with one (or both) of these… src=\"/logo-mono-white.png\" … src=\"/logo-mono-dark.png\" … style={{ height: \"80px\", width: \"auto\" }}"
+          "Fix routing – switch to HashRouter (easiest for ICP static assets)\n...\nHashRouter uses # in URLs (e.g. /#/dashboard) – no server rewrites needed, perfect for ICP asset canisters."
         ]
       },
       "acceptanceCriteria": [
-        "In `frontend/src/components/Header.tsx`, the header logo `<img>` uses `src=\"/logo-mono-white.png\"` when the resolved theme is light and `src=\"/logo-mono-dark.png\"` when the resolved theme is dark.",
-        "The logo is displayed at 80px height and preserves aspect ratio (width auto).",
-        "The light-mode logo `alt` text is exactly \"EcoPowerHub AI\" and the dark-mode logo `alt` text is exactly \"EcoPowerHub AI (dark)\"."
+        "Navigating to any existing route (e.g., dashboard, diagnostics, tech-specs) results in URLs that include a hash fragment (e.g., /#/dashboard).",
+        "Directly loading a deep link with a hash route (e.g., https://<canister-domain>/#/dashboard) renders the expected page instead of a blank/404 page.",
+        "All existing routes defined in frontend/src/App.tsx continue to work without changing their path strings."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the marketing site header logo to use the same new monochrome logo files (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode) with a height of 80px and automatic width.",
+      "text": "Adjust the Vite build configuration to use relative asset paths for ICP static hosting by setting Vite base to './' (and keep production build compatibility).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "Open src/App.tsx (or wherever your header/logo lives) and replace the current <img> with one (or both) of these… src=\"/logo-mono-white.png\" … src=\"/logo-mono-dark.png\""
+          "Try:\n... base: './',  // ← relative paths – often fixes asset loading on ICP"
         ]
       },
       "acceptanceCriteria": [
-        "In `frontend/src/components/MarketingHeader.tsx`, the logo `<img>` uses `/logo-mono-white.png` in light mode and `/logo-mono-dark.png` in dark mode (using existing theme logic).",
-        "The marketing header logo is displayed at 80px height and preserves aspect ratio (width auto).",
-        "The rendered logo `alt` text matches the same strings as the app header: \"EcoPowerHub AI\" (light) and \"EcoPowerHub AI (dark)\" (dark)."
+        "frontend/vite.config.ts sets base to './'.",
+        "After running the production build, the generated dist/index.html references JS/CSS assets using relative paths that load correctly when hosted from an ICP asset canister."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a user-visible top-level error fallback so unexpected runtime errors during app/router rendering do not appear as a blank white screen. Use existing in-repo fallback components where possible and keep user-facing text in English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Bonus: Add error boundary & fallback\n...\nThis should bring back the globe / content"
+        ]
+      },
+      "acceptanceCriteria": [
+        "If an exception is thrown during initial route rendering, the app shows an on-screen error message and at least one recovery action (e.g., reload or navigate home) instead of a blank screen.",
+        "Normal routing and page rendering behavior is unchanged when no error occurs.",
+        "All user-visible error text is in English."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`, or `frontend/src/components/ui` (compose existing components instead).",
-    "Do not introduce new authentication providers; Internet Identity remains the only auth method."
+    "Do not edit immutable frontend files: frontend/src/main.tsx, frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, frontend/src/components/ui/**.",
+    "Keep all backend logic in the single Motoko actor (no backend changes required for this request)."
   ],
   "nonGoals": [
-    "Regenerate or visually enhance the logo PNGs (no ImageMagick/logo v2 work in this change).",
-    "Fix or replace corrupted full-color logo assets (e.g., `logo-main.png`).",
-    "Add new theme system behavior beyond selecting the correct logo for the already-existing light/dark theme resolution."
+    "Implementing clean (non-hash) URLs with server-side rewrite rules on ICP.",
+    "Changing the existing route paths or adding new product features unrelated to routing/build stability."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

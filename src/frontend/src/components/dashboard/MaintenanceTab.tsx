@@ -2,92 +2,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Activity, AlertTriangle, CheckCircle2, XCircle, RefreshCw, Zap, TrendingUp, Settings, Info } from 'lucide-react';
+import { Activity, AlertTriangle, CheckCircle2, XCircle, RefreshCw, Zap, TrendingUp, Settings, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-
-// Local type definitions for maintenance features (backend implementation pending)
-type ServiceStatus = 'healthy' | 'degraded' | 'unhealthy' | 'unknown';
-
-type MaintenanceEvent = {
-  id: string;
-  timestamp: bigint;
-  service: string;
-  issueType: string;
-  resolution: string;
-  status: string;
-  rootCause: string;
-  timeToResolution: number;
-  retryCount: number;
-};
-
-type LearningUpdate = {
-  id: string;
-  timestamp: bigint;
-  issuePattern: string;
-  optimizationSuggestion: string;
-  deviceCorrelation: string;
-  impact: string;
-};
-
-type SystemHealth = {
-  overallStatus: ServiceStatus;
-  networkStatus: ServiceStatus;
-  deviceIntegrationStatus: ServiceStatus;
-  dataSyncStatus: ServiceStatus;
-  backendStatus: ServiceStatus;
-  performanceMetrics: string;
-  uptime: number;
-  activeProcesses: string[];
-};
-
-type MaintenanceConfig = {
-  autoRepairThreshold: number;
-  maxRetries: number;
-  alertEscalationThreshold: number;
-  isActive: boolean;
-  createdAt: bigint;
-  updatedAt: bigint;
-};
-
-type MaintenanceDashboard = {
-  systemHealth: SystemHealth;
-  recentEvents: MaintenanceEvent[];
-  learningUpdates: LearningUpdate[];
-  optimizationSuggestions: string[];
-  config: MaintenanceConfig;
-};
+import { useGetMaintenanceDashboard } from '@/hooks/useQueries';
+import type { ServiceStatus } from '@/backend';
 
 export default function MaintenanceTab() {
-  // Mock data for demonstration (backend implementation pending)
-  const mockDashboard: MaintenanceDashboard = {
-    systemHealth: {
-      overallStatus: 'healthy',
-      networkStatus: 'healthy',
-      deviceIntegrationStatus: 'healthy',
-      dataSyncStatus: 'healthy',
-      backendStatus: 'healthy',
-      performanceMetrics: 'All systems operational',
-      uptime: 99.99,
-      activeProcesses: ['monitoring', 'sync', 'integration'],
-    },
-    recentEvents: [],
-    learningUpdates: [],
-    optimizationSuggestions: [
-      'System is running optimally',
-      'No optimization suggestions at this time',
-      'Continue monitoring for potential improvements',
-    ],
-    config: {
-      autoRepairThreshold: 3,
-      maxRetries: 5,
-      alertEscalationThreshold: 3,
-      isActive: true,
-      createdAt: BigInt(Date.now() * 1000000),
-      updatedAt: BigInt(Date.now() * 1000000),
-    },
-  };
-
-  const dashboard = mockDashboard;
+  const { data: dashboard, isLoading, error, refetch } = useGetMaintenanceDashboard();
 
   const getStatusColor = (status: ServiceStatus) => {
     switch (status) {
@@ -115,25 +36,45 @@ export default function MaintenanceTab() {
     }
   };
 
-  const handleManualRefresh = () => {
+  const handleManualRefresh = async () => {
+    await refetch();
     toast.success('Dashboard refreshed', {
       description: 'Latest maintenance data loaded',
     });
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Backend Implementation Notice */}
-      <Alert className="border-blue-500 bg-blue-50 dark:bg-blue-950/20">
-        <Info className="h-5 w-5 text-blue-600" />
-        <AlertTitle className="text-blue-900 dark:text-blue-100">
-          Maintenance AI Dashboard (Preview)
-        </AlertTitle>
-        <AlertDescription className="text-blue-800 dark:text-blue-200">
-          This dashboard displays mock data. Backend implementation for self-healing maintenance engine is pending.
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertTriangle className="h-5 w-5" />
+        <AlertTitle>Error Loading Maintenance Dashboard</AlertTitle>
+        <AlertDescription>
+          {error instanceof Error ? error.message : 'Failed to load maintenance data'}
         </AlertDescription>
       </Alert>
+    );
+  }
 
+  if (!dashboard) {
+    return (
+      <Alert>
+        <Activity className="h-5 w-5" />
+        <AlertTitle>No Data Available</AlertTitle>
+        <AlertDescription>Maintenance dashboard data is not available.</AlertDescription>
+      </Alert>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
       {/* System Health Overview */}
       <Card>
         <CardHeader>
@@ -179,7 +120,7 @@ export default function MaintenanceTab() {
             <div className={`p-3 rounded-lg border ${getStatusColor(dashboard.systemHealth.deviceIntegrationStatus)}`}>
               <div className="flex items-center gap-2">
                 {getStatusIcon(dashboard.systemHealth.deviceIntegrationStatus)}
-                <span className="font-medium">Device Integrations</span>
+                <span className="font-medium">Device Integration</span>
               </div>
             </div>
             <div className={`p-3 rounded-lg border ${getStatusColor(dashboard.systemHealth.dataSyncStatus)}`}>
@@ -191,14 +132,14 @@ export default function MaintenanceTab() {
             <div className={`p-3 rounded-lg border ${getStatusColor(dashboard.systemHealth.backendStatus)}`}>
               <div className="flex items-center gap-2">
                 {getStatusIcon(dashboard.systemHealth.backendStatus)}
-                <span className="font-medium">Backend Canister</span>
+                <span className="font-medium">Backend Services</span>
               </div>
             </div>
           </div>
 
           {/* Active Processes */}
-          <div>
-            <h4 className="text-sm font-medium mb-2">Active Monitoring Processes</h4>
+          <div className="mt-4">
+            <h4 className="text-sm font-medium mb-2">Active Processes</h4>
             <div className="flex flex-wrap gap-2">
               {dashboard.systemHealth.activeProcesses.map((process, index) => (
                 <Badge key={index} variant="secondary">
@@ -217,82 +158,121 @@ export default function MaintenanceTab() {
             <Zap className="h-5 w-5" />
             Recent Self-Healing Events
           </CardTitle>
-          <CardDescription>Automated maintenance actions and resolutions</CardDescription>
+          <CardDescription>Automatic issue detection and resolution history</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
-            <CheckCircle2 className="h-12 w-12 mx-auto mb-2 text-green-600" />
-            <p>No maintenance events recorded. All systems running smoothly!</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Learning Updates & Optimization Suggestions */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Learning Updates
-            </CardTitle>
-            <CardDescription>AI-powered insights from recurring issues</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-center py-8 text-muted-foreground">
-              No learning updates yet. The system is gathering data.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="h-5 w-5" />
-              Optimization Suggestions
-            </CardTitle>
-            <CardDescription>Recommended improvements for system performance</CardDescription>
-          </CardHeader>
-          <CardContent>
+          {dashboard.recentEvents.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <CheckCircle2 className="h-12 w-12 mx-auto mb-2 text-green-600" />
+              <p>No recent events. All systems running smoothly!</p>
+            </div>
+          ) : (
             <div className="space-y-3">
-              {dashboard.optimizationSuggestions.map((suggestion, index) => (
-                <div key={index} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                  <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <p className="text-sm">{suggestion}</p>
+              {dashboard.recentEvents.map((event) => (
+                <div key={event.id} className="p-4 border rounded-lg">
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <h4 className="font-semibold">{event.service}</h4>
+                      <p className="text-sm text-muted-foreground">{event.issueType}</p>
+                    </div>
+                    <Badge variant={event.status === 'resolved' ? 'default' : 'destructive'}>
+                      {event.status}
+                    </Badge>
+                  </div>
+                  <p className="text-sm mb-2">{event.resolution}</p>
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <span>Root Cause: {event.rootCause}</span>
+                    <span>Time to Resolution: {Number(event.timeToResolution)}s</span>
+                    <span>Retries: {Number(event.retryCount)}</span>
+                  </div>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Learning Updates */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            AI Learning Updates
+          </CardTitle>
+          <CardDescription>System intelligence improvements and pattern recognition</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {dashboard.learningUpdates.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>No learning updates yet. System is gathering data...</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {dashboard.learningUpdates.map((update) => (
+                <div key={update.id} className="p-4 border rounded-lg">
+                  <h4 className="font-semibold mb-2">Pattern Detected: {update.issuePattern}</h4>
+                  <p className="text-sm mb-2">{update.optimizationSuggestion}</p>
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <span>Device Correlation: {update.deviceCorrelation}</span>
+                    <span>Impact: {update.impact}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Optimization Suggestions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Optimization Suggestions</CardTitle>
+          <CardDescription>Recommended actions to improve system performance</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2">
+            {dashboard.optimizationSuggestions.map((suggestion, index) => (
+              <li key={index} className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>{suggestion}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
 
       {/* Maintenance Configuration */}
       <Card>
         <CardHeader>
-          <CardTitle>Maintenance Configuration</CardTitle>
-          <CardDescription>Current settings for automated maintenance actions</CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5" />
+            Maintenance Configuration
+          </CardTitle>
+          <CardDescription>Self-healing system settings</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="space-y-1">
-              <p className="text-sm font-medium">Auto-Repair Threshold</p>
-              <p className="text-2xl font-bold">{dashboard.config.autoRepairThreshold}</p>
-              <p className="text-xs text-muted-foreground">failures before auto-repair</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-3 border rounded-lg">
+              <div className="text-sm text-muted-foreground">Auto-Repair Threshold</div>
+              <div className="text-2xl font-bold">{Number(dashboard.config.autoRepairThreshold)}</div>
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium">Max Retries</p>
-              <p className="text-2xl font-bold">{dashboard.config.maxRetries}</p>
-              <p className="text-xs text-muted-foreground">maximum retry attempts</p>
+            <div className="p-3 border rounded-lg">
+              <div className="text-sm text-muted-foreground">Max Retries</div>
+              <div className="text-2xl font-bold">{Number(dashboard.config.maxRetries)}</div>
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium">Alert Escalation</p>
-              <p className="text-2xl font-bold">{dashboard.config.alertEscalationThreshold}</p>
-              <p className="text-xs text-muted-foreground">failures before escalation</p>
+            <div className="p-3 border rounded-lg">
+              <div className="text-sm text-muted-foreground">Alert Escalation Threshold</div>
+              <div className="text-2xl font-bold">{Number(dashboard.config.alertEscalationThreshold)}</div>
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium">Status</p>
-              <Badge variant={dashboard.config.isActive ? 'default' : 'secondary'} className="text-lg">
-                {dashboard.config.isActive ? 'Active' : 'Inactive'}
-              </Badge>
+            <div className="p-3 border rounded-lg">
+              <div className="text-sm text-muted-foreground">System Status</div>
+              <div className="text-2xl font-bold">
+                {dashboard.config.isActive ? (
+                  <Badge variant="default">Active</Badge>
+                ) : (
+                  <Badge variant="secondary">Inactive</Badge>
+                )}
+              </div>
             </div>
           </div>
         </CardContent>

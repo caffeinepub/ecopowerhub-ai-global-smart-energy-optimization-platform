@@ -43,9 +43,10 @@ actor EcoPowerHubAI {
 
   public query ({ caller }) func getCallerUserRole() : async AccessControl.UserRole {
     if (Principal.isAnonymous(caller)) {
-      return #guest;
+      #guest;
+    } else {
+      AccessControl.getUserRole(accessControlState, caller);
     };
-    AccessControl.getUserRole(accessControlState, caller);
   };
 
   public shared ({ caller }) func assignCallerUserRole(user : Principal, role : AccessControl.UserRole) : async () {
@@ -57,9 +58,10 @@ actor EcoPowerHubAI {
 
   public query ({ caller }) func isCallerAdmin() : async Bool {
     if (Principal.isAnonymous(caller)) {
-      return false;
+      false;
+    } else {
+      AccessControl.isAdmin(accessControlState, caller);
     };
-    AccessControl.isAdmin(accessControlState, caller);
   };
 
   public type UserProfile = {
@@ -542,45 +544,46 @@ actor EcoPowerHubAI {
   // Helper functions
   func hasSystemAccess(caller : Principal, systemId : Text) : Bool {
     if (Principal.isAnonymous(caller)) {
-      return false;
-    };
-    if (AccessControl.isAdmin(accessControlState, caller)) {
-      return true;
-    };
-    switch (textMap.get(systemConfigs, systemId)) {
-      case (null) { false };
-      case (?config) { config.owner == caller };
+      false;
+    } else if (AccessControl.isAdmin(accessControlState, caller)) {
+      true;
+    } else {
+      switch (textMap.get(systemConfigs, systemId)) {
+        case (null) { false };
+        case (?config) { config.owner == caller };
+      };
     };
   };
 
   func hasDeviceAccess(caller : Principal, deviceId : Text) : Bool {
     if (Principal.isAnonymous(caller)) {
-      return false;
-    };
-    if (AccessControl.isAdmin(accessControlState, caller)) {
-      return true;
-    };
-    let devices = List.toArray(deviceHealthRecords);
-    for (device in devices.vals()) {
-      if (device.deviceId == deviceId and device.userId == caller) {
-        return true;
+      false;
+    } else if (AccessControl.isAdmin(accessControlState, caller)) {
+      true;
+    } else {
+      let devices = List.toArray(deviceHealthRecords);
+      for (device in devices.vals()) {
+        if (device.deviceId == deviceId and device.userId == caller) {
+          return true;
+        };
       };
+      false;
     };
-    false;
   };
 
   func hasActiveSupportContract(userId : Principal) : Bool {
     if (Principal.isAnonymous(userId)) {
-      return false;
-    };
-    let contracts = List.toArray(supportContracts);
-    let now = Time.now();
-    for (contract in contracts.vals()) {
-      if (contract.userId == userId and contract.isActive and contract.expiresAt > now) {
-        return true;
+      false;
+    } else {
+      let contracts = List.toArray(supportContracts);
+      let now = Time.now();
+      for (contract in contracts.vals()) {
+        if (contract.userId == userId and contract.isActive and contract.expiresAt > now) {
+          return true;
+        };
       };
+      false;
     };
-    false;
   };
 
   func sanitizeConfig(config : SystemConfig) : SystemConfigPublic {
@@ -595,54 +598,54 @@ actor EcoPowerHubAI {
 
   func hasAlarmAccess(caller : Principal, alarmId : Text) : Bool {
     if (Principal.isAnonymous(caller)) {
-      return false;
-    };
-    if (AccessControl.isAdmin(accessControlState, caller)) {
-      return true;
-    };
-    switch (textMap.get(alarmConfigs, alarmId)) {
-      case (null) { false };
-      case (?alarm) { alarm.userId == caller };
+      false;
+    } else if (AccessControl.isAdmin(accessControlState, caller)) {
+      true;
+    } else {
+      switch (textMap.get(alarmConfigs, alarmId)) {
+        case (null) { false };
+        case (?alarm) { alarm.userId == caller };
+      };
     };
   };
 
   func hasScheduledUpdateAccess(caller : Principal, updateId : Text) : Bool {
     if (Principal.isAnonymous(caller)) {
-      return false;
-    };
-    if (AccessControl.isAdmin(accessControlState, caller)) {
-      return true;
-    };
-    switch (textMap.get(scheduledUpdates, updateId)) {
-      case (null) { false };
-      case (?update) { update.userId == caller };
+      false;
+    } else if (AccessControl.isAdmin(accessControlState, caller)) {
+      true;
+    } else {
+      switch (textMap.get(scheduledUpdates, updateId)) {
+        case (null) { false };
+        case (?update) { update.userId == caller };
+      };
     };
   };
 
   func hasDiagnosticAccess(caller : Principal, diagnosticId : Text) : Bool {
     if (Principal.isAnonymous(caller)) {
-      return false;
-    };
-    if (AccessControl.isAdmin(accessControlState, caller)) {
-      return true;
-    };
-    let events = List.toArray(diagnosticEvents);
-    for (event in events.vals()) {
-      if (event.id == diagnosticId and event.userId == caller) {
-        return true;
+      false;
+    } else if (AccessControl.isAdmin(accessControlState, caller)) {
+      true;
+    } else {
+      let events = List.toArray(diagnosticEvents);
+      for (event in events.vals()) {
+        if (event.id == diagnosticId and event.userId == caller) {
+          return true;
+        };
       };
+      false;
     };
-    false;
   };
 
   func hasEVOAuthAccess(caller : Principal, userId : Principal) : Bool {
     if (Principal.isAnonymous(caller)) {
-      return false;
+      false;
+    } else if (AccessControl.isAdmin(accessControlState, caller)) {
+      true;
+    } else {
+      caller == userId;
     };
-    if (AccessControl.isAdmin(accessControlState, caller)) {
-      return true;
-    };
-    caller == userId;
   };
 
   transient let textMap = OrderedMap.Make<Text>(Text.compare);

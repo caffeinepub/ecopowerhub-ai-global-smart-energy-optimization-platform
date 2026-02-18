@@ -1,27 +1,35 @@
-import { RouterProvider, createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
+import { lazy, Suspense } from 'react';
+import { RouterProvider, createRouter, createRoute, createRootRoute, createHashHistory } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from 'next-themes';
-import LoginPage from './pages/LoginPage';
-import Dashboard from './pages/Dashboard';
-import LandingPage from './pages/LandingPage';
-import DiagnosticsPage from './pages/DiagnosticsPage';
-import TechSpecsPage from './pages/TechSpecsPage';
-import BestPracticesPage from './pages/BestPracticesPage';
-import PartnerMarketplacePage from './pages/PartnerMarketplacePage';
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
-import SupportIntegrationsPage from './pages/SupportIntegrationsPage';
-import DomainPortfolioPage from './pages/DomainPortfolioPage';
-import ComplianceSecurityPage from './pages/ComplianceSecurityPage';
-import DeviceIntegrationGuidesPage from './pages/DeviceIntegrationGuidesPage';
-import MarketingCampaignAssetsPage from './pages/MarketingCampaignAssetsPage';
-import EmailAutomationPage from './pages/EmailAutomationPage';
-import DeploymentStatusPage from './pages/DeploymentStatusPage';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ProfileSetupModal from './components/ProfileSetupModal';
+import RootRoute from './routes/RootRoute';
+import RouteErrorFallback from './components/RouteErrorFallback';
+import AppErrorBoundary from './components/AppErrorBoundary';
 import { useInternetIdentity } from './hooks/useInternetIdentity';
 import { useGetCallerUserProfile } from './hooks/useQueries';
+
+// Eager-loaded components (initial routes)
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+
+// Lazy-loaded components (non-initial routes)
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const DiagnosticsPage = lazy(() => import('./pages/DiagnosticsPage'));
+const TechSpecsPage = lazy(() => import('./pages/TechSpecsPage'));
+const BestPracticesPage = lazy(() => import('./pages/BestPracticesPage'));
+const PartnerMarketplacePage = lazy(() => import('./pages/PartnerMarketplacePage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
+const SupportIntegrationsPage = lazy(() => import('./pages/SupportIntegrationsPage'));
+const DomainPortfolioPage = lazy(() => import('./pages/DomainPortfolioPage'));
+const ComplianceSecurityPage = lazy(() => import('./pages/ComplianceSecurityPage'));
+const DeviceIntegrationGuidesPage = lazy(() => import('./pages/DeviceIntegrationGuidesPage'));
+const MarketingCampaignAssetsPage = lazy(() => import('./pages/MarketingCampaignAssetsPage'));
+const EmailAutomationPage = lazy(() => import('./pages/EmailAutomationPage'));
+const DeploymentStatusPage = lazy(() => import('./pages/DeploymentStatusPage'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +39,18 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Loading fallback component
+function RouteLoadingFallback() {
+  return (
+    <div className="flex min-h-[400px] items-center justify-center p-4">
+      <div className="text-center space-y-4">
+        <div className="h-16 w-16 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto" />
+        <p className="text-lg font-medium text-foreground">Loading page...</p>
+      </div>
+    </div>
+  );
+}
 
 // Layout component for authenticated pages
 function AppLayout({ children }: { children: React.ReactNode }) {
@@ -56,7 +76,10 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-const rootRoute = createRootRoute();
+const rootRoute = createRootRoute({
+  component: RootRoute,
+  errorComponent: RouteErrorFallback,
+});
 
 const landingRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -74,96 +97,145 @@ const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/dashboard',
   component: () => (
-    <AppLayout>
-      <Dashboard />
-    </AppLayout>
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <AppLayout>
+        <Dashboard />
+      </AppLayout>
+    </Suspense>
   ),
 });
 
 const diagnosticsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/diagnostics',
-  component: DiagnosticsPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <DiagnosticsPage />
+    </Suspense>
+  ),
 });
 
 const techSpecsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/tech-specs',
-  component: TechSpecsPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <TechSpecsPage />
+    </Suspense>
+  ),
 });
 
 const bestPracticesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/best-practices',
-  component: BestPracticesPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <BestPracticesPage />
+    </Suspense>
+  ),
 });
 
 const partnerMarketplaceRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/partner-marketplace',
-  component: PartnerMarketplacePage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <PartnerMarketplacePage />
+    </Suspense>
+  ),
 });
 
 const partnerIntegrationRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/partner-integration',
-  component: PartnerMarketplacePage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <PartnerMarketplacePage />
+    </Suspense>
+  ),
 });
 
 const privacyPolicyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/privacy-policy',
-  component: PrivacyPolicyPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <PrivacyPolicyPage />
+    </Suspense>
+  ),
 });
 
 const supportIntegrationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/support-integrations',
-  component: SupportIntegrationsPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <SupportIntegrationsPage />
+    </Suspense>
+  ),
 });
 
-// Add explicit /support route alias
 const supportRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/support',
-  component: SupportIntegrationsPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <SupportIntegrationsPage />
+    </Suspense>
+  ),
 });
 
 const domainsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/domains',
   component: () => (
-    <AppLayout>
-      <DomainPortfolioPage />
-    </AppLayout>
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <AppLayout>
+        <DomainPortfolioPage />
+      </AppLayout>
+    </Suspense>
   ),
 });
 
 const complianceSecurityRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/compliance-security',
-  component: ComplianceSecurityPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <ComplianceSecurityPage />
+    </Suspense>
+  ),
 });
 
 const deviceIntegrationGuidesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/integration-guides',
-  component: DeviceIntegrationGuidesPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <DeviceIntegrationGuidesPage />
+    </Suspense>
+  ),
 });
 
 const marketingCampaignAssetsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/marketing-campaign-assets',
-  component: MarketingCampaignAssetsPage,
+  component: () => (
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <MarketingCampaignAssetsPage />
+    </Suspense>
+  ),
 });
 
 const emailAutomationRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/email-automation',
   component: () => (
-    <AppLayout>
-      <EmailAutomationPage />
-    </AppLayout>
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <AppLayout>
+        <EmailAutomationPage />
+      </AppLayout>
+    </Suspense>
   ),
 });
 
@@ -171,9 +243,11 @@ const deploymentStatusRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/deployment-status',
   component: () => (
-    <AppLayout>
-      <DeploymentStatusPage />
-    </AppLayout>
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <AppLayout>
+        <DeploymentStatusPage />
+      </AppLayout>
+    </Suspense>
   ),
 });
 
@@ -197,7 +271,13 @@ const routeTree = rootRoute.addChildren([
   deploymentStatusRoute,
 ]);
 
-const router = createRouter({ routeTree });
+// Create hash history for ICP static asset hosting compatibility
+const hashHistory = createHashHistory();
+
+const router = createRouter({ 
+  routeTree,
+  history: hashHistory,
+});
 
 declare module '@tanstack/react-router' {
   interface Register {
@@ -207,11 +287,13 @@ declare module '@tanstack/react-router' {
 
 export default function App() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <Toaster />
-      </QueryClientProvider>
-    </ThemeProvider>
+    <AppErrorBoundary>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <Toaster />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </AppErrorBoundary>
   );
 }

@@ -56,76 +56,110 @@ export default function LoginPage() {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-3 p-4 bg-accent/50 rounded-lg">
               <Globe className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-semibold text-lg mb-1">Voice-Guided Coaching</h3>
+                <h3 className="font-semibold text-lg mb-1">Works Worldwide</h3>
                 <p className="text-sm text-muted-foreground">
-                  Get personalized recommendations in your language with friendly voice guidance
+                  Compatible with devices in any region, with support for your local voltage and language
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-3 p-4 bg-accent/50 rounded-lg">
               <TrendingDown className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-semibold text-lg mb-1">Predictive Analytics</h3>
+                <h3 className="font-semibold text-lg mb-1">Smart Recommendations</h3>
                 <p className="text-sm text-muted-foreground">
-                  AI-powered forecasts help you stay ahead and optimize your energy consumption
+                  Get personalized tips to reduce your bills without sacrificing comfort
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-3 p-4 bg-accent/50 rounded-lg">
               <Shield className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-semibold text-lg mb-1">Secure & Private</h3>
                 <p className="text-sm text-muted-foreground">
-                  Your data is protected with Internet Identity - no passwords, no tracking
+                  Your data is encrypted and stored on the blockchain for maximum security
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Call to Action */}
-          <div className="space-y-4">
+          {/* Login Button */}
+          <div 
+            className="p-8 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20"
+            style={{
+              minHeight: 'clamp(500px, 80vh, 800px)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '2rem'
+            }}
+          >
+            <div className="text-center space-y-4">
+              <h2 className="text-2xl md:text-3xl font-bold">
+                Ready to Start Saving?
+              </h2>
+              <p className="text-muted-foreground max-w-md">
+                Log in securely with Internet Identity to access your personalized energy dashboard
+              </p>
+            </div>
+
             <Button
               onClick={handleLogin}
               disabled={isLoggingIn}
               size="lg"
-              className="w-full text-lg py-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+              className="text-xl px-12 py-8 rounded-full shadow-lg hover:shadow-xl transition-all"
             >
               {isLoggingIn ? (
                 <>
-                  <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <div className="mr-3 h-5 w-5 animate-spin rounded-full border-2 border-background border-t-transparent" />
                   Connecting...
                 </>
               ) : (
                 <>
-                  <Sparkles className="mr-2 h-5 w-5" />
-                  Let's Get Started! 🚀
+                  <Sparkles className="mr-3 h-6 w-6" />
+                  Login with Internet Identity
                 </>
               )}
             </Button>
-            
-            <p className="text-center text-sm text-muted-foreground">
-              By logging in, you agree to our{' '}
-              <a href="/privacy-policy" className="text-primary hover:underline">
-                Privacy Policy
-              </a>{' '}
-              and{' '}
-              <a href="/terms" className="text-primary hover:underline">
-                Terms of Service
-              </a>
+
+            <p className="text-sm text-muted-foreground text-center max-w-md">
+              New to Internet Identity? Don't worry! It's a secure, privacy-focused way to log in. 
+              We'll guide you through the simple setup process.
             </p>
           </div>
 
-          {/* Additional Info */}
-          <div className="pt-6 border-t">
-            <p className="text-center text-sm text-muted-foreground">
-              🌟 Join thousands of users worldwide who are already saving energy and money with EcoPowerHub AI
+          {/* Trust Indicators */}
+          <div 
+            className="text-center space-y-3 pt-6 border-t"
+            style={{
+              borderRadius: '16px',
+              backdropFilter: 'blur(8px)',
+              padding: 'clamp(1.5rem, 5vw, 3rem)'
+            }}
+          >
+            <p className="text-sm font-semibold text-muted-foreground">
+              Trusted by energy-conscious users worldwide
             </p>
+            <div className="flex items-center justify-center gap-6 flex-wrap text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-primary" />
+                <span>Blockchain Security</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-primary" />
+                <span>Global Coverage</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Zap className="h-4 w-4 text-primary" />
+                <span>Real-Time Data</span>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>

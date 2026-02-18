@@ -7,16 +7,16 @@ import AddSystemDialog from './AddSystemDialog';
 import SystemStatusCards from './SystemStatusCards';
 import MyEVCard from './MyEVCard';
 import EVAuthDialog from './EVAuthDialog';
-import { EVProvider } from '../../types';
+import { EVProvider } from '../../backend';
 
 export default function SystemsTab() {
   const [addSystemDialogOpen, setAddSystemDialogOpen] = useState(false);
   const [evAuthDialogOpen, setEVAuthDialogOpen] = useState(false);
-  const [selectedEVProvider, setSelectedEVProvider] = useState<EVProvider>(EVProvider.Ford);
+  const [selectedEVProvider, setSelectedEVProvider] = useState<EVProvider>(EVProvider.ford);
 
   const { data: systems = [] } = useGetAllSystemConfigsFull();
-  const { data: fordConfig } = useGetEVOAuthConfig(EVProvider.Ford);
-  const { data: rivianConfig } = useGetEVOAuthConfig(EVProvider.Rivian);
+  const { data: fordConfig } = useGetEVOAuthConfig(EVProvider.ford);
+  const { data: rivianConfig } = useGetEVOAuthConfig(EVProvider.rivian);
   const deleteEVOAuthMutation = useDeleteEVOAuthConfig();
 
   const handleConnectEV = (provider: EVProvider) => {
@@ -25,7 +25,7 @@ export default function SystemsTab() {
   };
 
   const handleDisconnectEV = async (provider: EVProvider) => {
-    if (confirm(`Are you sure you want to disconnect your ${provider === EVProvider.Ford ? 'Ford' : 'Rivian'} vehicle?`)) {
+    if (confirm(`Are you sure you want to disconnect your ${provider === EVProvider.ford ? 'Ford' : 'Rivian'} vehicle?`)) {
       try {
         await deleteEVOAuthMutation.mutateAsync(provider);
       } catch (error) {
@@ -60,9 +60,9 @@ export default function SystemsTab() {
         <div className="grid gap-4 md:grid-cols-2">
           {fordConfig ? (
             <MyEVCard
-              provider={EVProvider.Ford}
+              provider={EVProvider.ford}
               telemetry={null}
-              onDisconnect={() => handleDisconnectEV(EVProvider.Ford)}
+              onDisconnect={() => handleDisconnectEV(EVProvider.ford)}
             />
           ) : (
             <Card>
@@ -71,7 +71,7 @@ export default function SystemsTab() {
                 <CardDescription>Connect your Ford electric vehicle</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button onClick={() => handleConnectEV(EVProvider.Ford)}>
+                <Button onClick={() => handleConnectEV(EVProvider.ford)}>
                   Connect Ford
                 </Button>
               </CardContent>
@@ -80,9 +80,9 @@ export default function SystemsTab() {
 
           {rivianConfig ? (
             <MyEVCard
-              provider={EVProvider.Rivian}
+              provider={EVProvider.rivian}
               telemetry={null}
-              onDisconnect={() => handleDisconnectEV(EVProvider.Rivian)}
+              onDisconnect={() => handleDisconnectEV(EVProvider.rivian)}
             />
           ) : (
             <Card>
@@ -91,7 +91,7 @@ export default function SystemsTab() {
                 <CardDescription>Connect your Rivian electric vehicle</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button onClick={() => handleConnectEV(EVProvider.Rivian)}>
+                <Button onClick={() => handleConnectEV(EVProvider.rivian)}>
                   Connect Rivian
                 </Button>
               </CardContent>

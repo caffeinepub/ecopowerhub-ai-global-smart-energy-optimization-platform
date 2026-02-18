@@ -327,69 +327,59 @@ export default function MarketingCampaignAssetsPage() {
                       </Button>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Editable template • Canva-compatible
+                      Edit in Canva or your preferred design tool
                     </p>
                   </CardContent>
                 </Card>
               ))}
             </div>
 
-            {/* Design Specs */}
-            <Card>
+            <Card className="bg-gradient-to-br from-[#007BFF]/10 to-emerald-500/10">
               <CardHeader>
-                <CardTitle>Design Specifications</CardTitle>
+                <CardTitle>Design Guidelines</CardTitle>
                 <CardDescription>
-                  All banners follow EcoPowerHub AI brand guidelines
+                  Tips for creating effective energy-saving campaign graphics
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-lg bg-muted/50">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
                     <h4 className="font-semibold mb-2">Color Palette</h4>
-                    <div className="flex gap-2">
-                      <div className="w-8 h-8 rounded bg-[#007BFF]" title="Electric Cyan" />
-                      <div className="w-8 h-8 rounded bg-black" title="Black" />
-                      <div className="w-8 h-8 rounded bg-white border" title="White" />
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Electric Cyan + Black + White
-                    </p>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• Primary: #007BFF (Trust Blue)</li>
+                      <li>• Secondary: #4CAF50 (Energy Green)</li>
+                      <li>• Accent: #00BCD4 (Tech Cyan)</li>
+                    </ul>
                   </div>
-                  <div className="p-4 rounded-lg bg-muted/50">
+                  <div>
                     <h4 className="font-semibold mb-2">Typography</h4>
-                    <p className="text-sm">
-                      Headlines: Bold, 32-48pt<br />
-                      Body: Regular, 16-24pt
-                    </p>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• Headlines: Bold, 48-72pt</li>
+                      <li>• Body: Regular, 18-24pt</li>
+                      <li>• CTA: Bold, 24-32pt</li>
+                    </ul>
                   </div>
-                  <div className="p-4 rounded-lg bg-muted/50">
-                    <h4 className="font-semibold mb-2">Elements</h4>
-                    <p className="text-sm">
-                      Logo placement: Bottom-right<br />
-                      Phone mockup: Center-left<br />
-                      CTA button: Bottom-center
-                    </p>
+                  <div>
+                    <h4 className="font-semibold mb-2">Imagery</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• Use real dashboard screenshots</li>
+                      <li>• Show actual savings numbers</li>
+                      <li>• Include device photos</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Messaging</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• Lead with specific savings</li>
+                      <li>• Emphasize ease of use</li>
+                      <li>• Include social proof</li>
+                    </ul>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
-
-        {/* Help Section */}
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>Need Custom Assets?</CardTitle>
-            <CardDescription>
-              Our team can create custom marketing materials tailored to your specific campaign needs.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild>
-              <a href="/support">Contact Marketing Support</a>
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

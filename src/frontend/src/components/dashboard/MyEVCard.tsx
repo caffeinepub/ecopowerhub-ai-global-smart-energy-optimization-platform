@@ -3,8 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Battery, Zap, TrendingUp } from 'lucide-react';
-import { EVProvider } from '../../types';
-import type { EVTelemetry } from '../../types';
+import { EVProvider, type EVTelemetry } from '../../backend';
 
 interface MyEVCardProps {
   provider: EVProvider;
@@ -15,7 +14,7 @@ interface MyEVCardProps {
 export default function MyEVCard({ provider, telemetry, onDisconnect }: MyEVCardProps) {
   const [isCharging, setIsCharging] = useState(false);
 
-  const providerName = provider === EVProvider.Ford ? 'Ford' : 'Rivian';
+  const providerName = provider === EVProvider.ford ? 'Ford' : 'Rivian';
 
   const handleChargeWithSolar = () => {
     setIsCharging(true);

@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-authenticated-app-header-logo-to-use-the-new-monochrome-logo-files-in-frontend-public-logo-mono-white-png-for-light-mode-and-logo-mono-dark-png-for-dark-mode-and-set-the-rendered-logo-height-to-80px-with-automatic-width",
-      "featureTitle": "Update the authenticated app header logo to use the new monochrome logo files in `frontend/public` (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode), and set the rendered logo height to 80px with automatic width.",
+      "featureId": "feature-update-the-frontend-routing-to-use-hash-based-urls-e-g-dashboard-so-page-refreshes-and-deep-links-work-on-icp-asset-canisters-without-server-side-rewrites-implement-this-using-the-existing-tanstack-router-setup-not-react-router-dom-configuring-the-router-to-use-hash-history",
+      "featureTitle": "Update the frontend routing to use hash-based URLs (e.g., /#/dashboard) so page refreshes and deep-links work on ICP asset canisters without server-side rewrites. Implement this using the existing TanStack Router setup (not react-router-dom), configuring the router to use hash history.",
       "files": [
-        "frontend/src/components/Header.tsx"
+        "frontend/src/App.tsx"
       ],
       "components": [
         "authorization@1.0.1",
@@ -24,10 +24,10 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-marketing-site-header-logo-to-use-the-same-new-monochrome-logo-files-logo-mono-white-png-for-light-mode-and-logo-mono-dark-png-for-dark-mode-with-a-height-of-80px-and-automatic-width",
-      "featureTitle": "Update the marketing site header logo to use the same new monochrome logo files (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode) with a height of 80px and automatic width.",
+      "featureId": "feature-adjust-the-vite-build-configuration-to-use-relative-asset-paths-for-icp-static-hosting-by-setting-vite-base-to-and-keep-production-build-compatibility",
+      "featureTitle": "Adjust the Vite build configuration to use relative asset paths for ICP static hosting by setting Vite base to './' (and keep production build compatibility).",
       "files": [
-        "frontend/src/components/MarketingHeader.tsx"
+        "frontend/vite.config.ts"
       ],
       "components": [
         "authorization@1.0.1",
@@ -42,6 +42,29 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-user-visible-top-level-error-fallback-so-unexpected-runtime-errors-during-app-router-rendering-do-not-appear-as-a-blank-white-screen-use-existing-in-repo-fallback-components-where-possible-and-keep-user-facing-text-in-english",
+      "featureTitle": "Add a user-visible top-level error fallback so unexpected runtime errors during app/router rendering do not appear as a blank white screen. Use existing in-repo fallback components where possible and keep user-facing text in English.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppErrorBoundary.tsx"
+      ],
+      "components": [
+        "authorization@1.0.1",
+        "http-outcalls@1.1.1",
+        "blob-storage@2.0.3",
+        "stripe@1.0.1",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

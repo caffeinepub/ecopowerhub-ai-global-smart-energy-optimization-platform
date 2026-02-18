@@ -7,8 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
 import { useAddEVOAuthConfig } from '../../hooks/useQueries';
 import { useInternetIdentity } from '../../hooks/useInternetIdentity';
-import { EVProvider } from '../../types';
-import type { EVOAuthConfig } from '../../types';
+import { EVProvider, type EVOAuthConfig } from '../../backend';
 
 interface EVAuthDialogProps {
   open: boolean;
@@ -23,7 +22,7 @@ export default function EVAuthDialog({ open, onOpenChange, provider }: EVAuthDia
 
   const addEVOAuthMutation = useAddEVOAuthConfig();
 
-  const providerName = provider === EVProvider.Ford ? 'Ford' : 'Rivian';
+  const providerName = provider === EVProvider.ford ? 'Ford' : 'Rivian';
 
   const handleConnect = async (e: React.FormEvent) => {
     e.preventDefault();

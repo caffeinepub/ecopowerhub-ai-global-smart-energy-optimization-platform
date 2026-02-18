@@ -195,3 +195,109 @@ export interface EVTelemetry {
   chargingStatus: string;
   timestamp: bigint;
 }
+
+export type ServiceStatus = 'healthy' | 'degraded' | 'unhealthy' | 'unknown';
+
+export type DeviceQuality = 'good' | 'bad' | 'uncertain';
+
+export interface MaintenanceEvent {
+  id: string;
+  timestamp: bigint;
+  service: string;
+  issueType: string;
+  resolution: string;
+  status: string;
+  rootCause: string;
+  timeToResolution: number;
+  retryCount: number;
+}
+
+export interface LearningUpdate {
+  id: string;
+  timestamp: bigint;
+  issuePattern: string;
+  optimizationSuggestion: string;
+  deviceCorrelation: string;
+  impact: string;
+}
+
+export interface SystemHealth {
+  overallStatus: ServiceStatus;
+  networkStatus: ServiceStatus;
+  deviceIntegrationStatus: ServiceStatus;
+  dataSyncStatus: ServiceStatus;
+  backendStatus: ServiceStatus;
+  performanceMetrics: string;
+  uptime: number;
+  activeProcesses: string[];
+}
+
+export interface MaintenanceConfig {
+  autoRepairThreshold: number;
+  maxRetries: number;
+  alertEscalationThreshold: number;
+  isActive: boolean;
+  createdAt: bigint;
+  updatedAt: bigint;
+}
+
+export interface MaintenanceDashboard {
+  systemHealth: SystemHealth;
+  recentEvents: MaintenanceEvent[];
+  learningUpdates: LearningUpdate[];
+  optimizationSuggestions: string[];
+  config: MaintenanceConfig;
+}
+
+export interface DiagnosticCheckResult {
+  checkType: string;
+  status: string;
+  message: string;
+  timestamp: bigint;
+}
+
+export interface DiagnosticEvent {
+  id: string;
+  deviceId: string;
+  tagId: string;
+  userId: Principal;
+  timestamp: bigint;
+  quality: DeviceQuality;
+  checks: DiagnosticCheckResult[];
+  errorCode?: string;
+  diagnosis: string;
+  suggestedActions: string[];
+  manufacturerReferralUrl?: string;
+  status: string;
+  progressPercent: number;
+}
+
+export interface DiagnosticFeedback {
+  id: string;
+  diagnosticEventId: string;
+  userId: Principal;
+  wasHelpful: boolean;
+  comment?: string;
+  timestamp: bigint;
+}
+
+export interface DeviceHealth {
+  deviceId: string;
+  tagId: string;
+  userId: Principal;
+  quality: DeviceQuality;
+  lastValue?: string;
+  lastValueTimestamp: bigint;
+  lastChecked: bigint;
+}
+
+export interface ErrorCode {
+  code: string;
+  manufacturer: string;
+  description: string;
+  plainEnglishMessage: string;
+  supportUrl: string;
+  isActive: boolean;
+  createdAt: bigint;
+  updatedAt: bigint;
+}

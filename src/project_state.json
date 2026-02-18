@@ -1,50 +1,44 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "EcoPowerHub AI frontend (Vite/React) deployed to an Internet Computer asset canister; current work focuses on fixing/replacing corrupted full-color logo assets and updating the site header to use newly generated monochrome logos.",
+  "summary": "EcoPowerHub frontend (Vite/React) deployed to an ICP asset canister; working on fixing build/routing issues for static hosting.",
   "architectural_notes": [
-    "Frontend is built with Vite and deployed to IC asset canister ecopowerhub_ai_assets (iovu4-biaaa-aaaam-qevxq-cai) accessible via https://iovu4-biaaa-aaaam-qevxq-cai.icp0.io/.",
-    "Static assets in frontend/public are served from the site root (e.g., public/logo-mono-white.png -> /logo-mono-white.png).",
-    "Logo assets are being generated/validated in WSL using ImageMagick (convert) and pngcheck before redeploy."
+    "For ICP asset canister static hosting, prefer react-router-dom HashRouter to avoid server-side rewrites (URLs use #).",
+    "Vite config may need base: './' to ensure relative asset paths work when served from an ICP canister/subpath."
   ],
   "known_issues": [
-    "logo-main.png (and decodes from logo-main-base64.txt) fails pngcheck with IHDR CRC error; ImageMagick cannot read it, blocking derivative logo generation from that source.",
-    "dfx deploy warns that no asset security policy is defined; .ic-assets.json5 should define a security_policy (or explicitly disable the warning)."
+    "Vite/Rollup build error: \"default\" is not exported by src/App.tsx, imported by src/main.tsx (likely App component export/import mismatch or duplicate/incorrect file path).",
+    "Routing/asset loading may fail on ICP static assets when using BrowserRouter without rewrites; switch to HashRouter and/or adjust Vite base."
   ],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-update-the-authenticated-app-header-logo-to-use-the-new-monochrome-logo-files-in-frontend-public-logo-mono-white-png-for-light-mode-and-logo-mono-dark-png-for-dark-mode-and-set-the-rendered-logo-height-to-80px-with-automatic-width",
-      "title": "Update the authenticated app header logo to use the new monochrome logo files in `frontend/public` (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode), and set the rendered logo height to 80px with automatic width.",
+      "id": "feature-update-the-frontend-routing-to-use-hash-based-urls-e-g-dashboard-so-page-refreshes-and-deep-links-work-on-icp-asset-canisters-without-server-side-rewrites-implement-this-using-the-existing-tanstack-router-setup-not-react-router-dom-configuring-the-router-to-use-hash-history",
+      "title": "Update the frontend routing to use hash-based URLs (e.g., /#/dashboard) so page refreshes and deep-links work on ICP asset canisters without server-side rewrites. Implement this using the existing TanStack Router setup (not react-router-dom), configuring the router to use hash history.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-update-the-marketing-site-header-logo-to-use-the-same-new-monochrome-logo-files-logo-mono-white-png-for-light-mode-and-logo-mono-dark-png-for-dark-mode-with-a-height-of-80px-and-automatic-width",
-      "title": "Update the marketing site header logo to use the same new monochrome logo files (`/logo-mono-white.png` for light mode and `/logo-mono-dark.png` for dark mode) with a height of 80px and automatic width.",
+      "id": "feature-adjust-the-vite-build-configuration-to-use-relative-asset-paths-for-icp-static-hosting-by-setting-vite-base-to-and-keep-production-build-compatibility",
+      "title": "Adjust the Vite build configuration to use relative asset paths for ICP static hosting by setting Vite base to './' (and keep production build compatibility).",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
-    }
-  ],
-  "new_feature_requests": [
-    {
-      "id": "AR-1",
-      "summary": "Update App.tsx/header to use new monochrome logo assets from /public (e.g., /logo-mono-white.png and /logo-mono-dark.png), optionally supporting light/dark mode selection.",
-      "reqIds": [],
-      "status": "pending"
     },
     {
-      "id": "AR-2",
-      "summary": "Improve/regenerate monochrome logo variants (v2) to better match original design (rings/text/spacing) using ImageMagick pipeline and deploy updated assets.",
-      "reqIds": [],
-      "status": "pending"
+      "id": "feature-add-a-user-visible-top-level-error-fallback-so-unexpected-runtime-errors-during-app-router-rendering-do-not-appear-as-a-blank-white-screen-use-existing-in-repo-fallback-components-where-possible-and-keep-user-facing-text-in-english",
+      "title": "Add a user-visible top-level error fallback so unexpected runtime errors during app/router rendering do not appear as a blank white screen. Use existing in-repo fallback components where possible and keep user-facing text in English.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
     }
   ],
-  "projectName": "EcoPowerHub AI",
+  "new_feature_requests": [],
+  "projectName": "EcoPowerHub",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

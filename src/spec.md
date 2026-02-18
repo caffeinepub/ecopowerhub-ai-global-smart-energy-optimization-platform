@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Update both the authenticated app header and the marketing site header to use the new monochrome logo assets, switching correctly for light/dark theme.
+**Goal:** Make the app work reliably on ICP static hosting by switching to hash-based routing, fixing Vite’s base path for relative assets, and adding a top-level runtime error fallback to avoid blank screens.
 
 **Planned changes:**
-- Update `frontend/src/components/Header.tsx` to render `/logo-mono-white.png` in light mode and `/logo-mono-dark.png` in dark mode, with logo height set to 80px and width auto, and exact alt text per theme.
-- Update `frontend/src/components/MarketingHeader.tsx` to use the same light/dark logo selection, 80px height with width auto, and matching alt text strings.
+- Update the existing TanStack Router configuration to use hash-based URL history so all current routes load correctly via `/#/...` deep links on ICP.
+- Set `base: './'` in `frontend/vite.config.ts` so production build assets are referenced with relative paths.
+- Add a top-level error fallback (using existing in-repo fallback components where possible) that displays an English error message and at least one recovery action (e.g., reload or navigate home) if an unexpected runtime error occurs during initial rendering.
 
-**User-visible outcome:** The header logo on both the marketing site and the authenticated app displays the correct monochrome logo for the current light/dark theme at a consistent 80px height.
+**User-visible outcome:** All pages use hash URLs (e.g., `/#/dashboard`) and can be refreshed or deep-linked on ICP without 404/blank screens; built assets load correctly from an ICP asset canister; unexpected render-time errors show a visible fallback with a recovery option instead of a white screen.
