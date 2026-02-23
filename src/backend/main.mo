@@ -12,9 +12,7 @@ import Text "mo:base/Text";
 import Time "mo:base/Time";
 import Float "mo:base/Float";
 import List "mo:base/List";
-import Migration "migration";
 
-(with migration = Migration.run)
 actor EcoPowerHubAI {
   let storage = Storage.new();
   include MixinStorage(storage);
@@ -1775,13 +1773,22 @@ actor EcoPowerHubAI {
     };
   };
 
-  public func getStripeSessionStatus(sessionId : Text) : async Stripe.StripeSessionStatus {
+  public shared ({ caller }) func getStripeSessionStatus(sessionId : Text) : async Stripe.StripeSessionStatus {
+    if (Principal.isAnonymous(caller)) {
+      Debug.trap("Unauthorized: Anonymous principal not allowed");
+    };
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can check Stripe session status");
+    };
     await Stripe.getSessionStatus(getStripeConfiguration(), sessionId, transform);
   };
 
   public shared ({ caller }) func createCheckoutSession(items : [Stripe.ShoppingItem], successUrl : Text, cancelUrl : Text) : async Text {
     if (Principal.isAnonymous(caller)) {
       Debug.trap("Unauthorized: Anonymous principal not allowed");
+    };
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can create checkout sessions");
     };
     await Stripe.createCheckoutSession(getStripeConfiguration(), caller, items, successUrl, cancelUrl, transform);
   };

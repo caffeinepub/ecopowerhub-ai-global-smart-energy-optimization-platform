@@ -1,6 +1,6 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix HTTP outcalls import error - Frontend Implementation Plan",
+  "title": "Fix Gateway Canister Motoko Syntax Error - Frontend Plan",
   "requirements": []
 }

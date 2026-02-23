@@ -1,73 +1,55 @@
 {
   "kind": "build_request",
-  "title": "Fix HTTP outcalls import error by replacing missing ExperimentalHttpOutcalls module",
+  "title": "Fix Gateway Canister Motoko Syntax Error",
   "projectName": "EcoPowerHub AI",
   "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Replace the non-existent import 'import ExperimentalHttpOutcalls \"mo:base/ExperimentalHttpOutcalls\"' in backend/main.mo (line 11) with the correct HTTP outcalls implementation. The base@0.13.4 package does not contain ExperimentalHttpOutcalls/lib.mo. Use the standard IC management canister approach by importing IC \"mo:base/ExperimentalInternetComputer\" or defining the HTTP outcalls types directly in the actor.",
+      "text": "Fix the Motoko syntax error at line 40 in src/gateway/main.mo where an unexpected 'actor' token is causing compilation to fail. The error message states: 'syntax error [M0001], unexpected token 'actor', expected one of token or <phrase> sequence: <typ_un>'. Resolve the type annotation or declaration issue that is preventing the gateway canister from compiling.",
       "target": "backend",
       "source": {
         "messageIds": [
           "msg-5"
         ],
         "quotes": [
-          "/home/bill/ecopowerhub-ai-clean/src/ais_assistant/main.mo:11.1-11.47: import error [M0009], file \".mops/base@0.13.4/src/ExperimentalHttpOutcalls/lib.mo\" does not exist"
+          "/home/bill/ecopowerhub-ai-clean/src/gateway/main.mo:40.25-40.30: syntax error [M0001], unexpected token 'actor', expected one of token or <phrase> sequence: <typ_un>"
         ]
       },
       "acceptanceCriteria": [
-        "The import error M0009 is resolved",
-        "The Motoko compiler successfully compiles backend/main.mo",
-        "HTTP outcalls functionality remains intact for existing features (device API calls, weather API)",
-        "dfx deploy ais_assistant completes without compilation errors"
+        "The gateway canister compiles successfully without syntax errors",
+        "dfx deploy gateway completes without compilation failures",
+        "The gateway.wasm file is generated successfully"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Define the HTTP outcalls types and management canister interface directly in backend/main.mo if they are not available from base library. Include types for HttpRequestArgs, HttpHeader, HttpMethod, HttpResponsePayload, and the management canister interface for http_request method.",
+      "text": "Ensure the gateway canister deploys successfully and has a valid wasm module so that canister calls like 'dfx canister call gateway registerDevice' work without the 'IC0537: Requested canister has no wasm module' error.",
       "target": "backend",
       "source": {
         "messageIds": [
           "msg-5"
         ],
         "quotes": [
-          "import error [M0009], file \".mops/base@0.13.4/src/ExperimentalHttpOutcalls/lib.mo\" does not exist"
+          "Error: Failed update call. Caused by: The replica returned a rejection error: reject code CanisterError, reject message Requested canister has no wasm module, error code Some(\"IC0537\")"
         ]
       },
       "acceptanceCriteria": [
-        "All HTTP outcalls type definitions are present and correct",
-        "The management canister actor is properly defined for making HTTP requests",
-        "Existing HTTP outcall functionality (setDevice, weather fetching) works as before"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Ensure all existing HTTP outcall usage in backend/main.mo is updated to use the corrected import or inline type definitions. This includes any calls to management canister's http_request function for device APIs and weather data.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ]
-      },
-      "acceptanceCriteria": [
-        "All HTTP outcall invocations compile successfully",
-        "The setDevice function at http://192.168.1.100/rpc/EM.GetStatus?id=0 continues to work",
-        "No runtime errors occur when making HTTP outcalls"
+        "The gateway canister deploys with a valid wasm module",
+        "The registerDevice function can be called successfully",
+        "Canister calls return proper responses instead of IC0537 errors"
       ]
     }
   ],
   "constraints": [
-    "Do not change the single-actor architecture",
-    "Preserve all existing backend functionality including device management, energy data, alarms, and EV integration",
-    "The solution must work with base@0.13.4 dependency as currently installed",
-    "Do not modify frontend code"
+    "The fix must maintain compatibility with the existing gateway canister architecture",
+    "Do not modify the canister ID assignments or actor aliases in dfx.json",
+    "Preserve the existing registerDevice function signature and behavior"
   ],
   "nonGoals": [
-    "Adding new features or functionality",
-    "Upgrading to a different version of the base library",
-    "Modifying the MOPS package configuration",
-    "Creating migration logic"
+    "Refactoring the entire gateway canister architecture",
+    "Adding new features to the gateway canister",
+    "Changing the device registration API contract"
   ],
   "imageRequirements": {
     "required": [],

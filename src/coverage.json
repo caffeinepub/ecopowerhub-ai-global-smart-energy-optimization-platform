@@ -1,32 +1,25 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-23T03:51:17.124Z",
+  "generatedAt": "2026-02-23T06:20:44.951Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
+    "total": 2,
     "implemented": 0,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Replace the non-existent import 'import ExperimentalHttpOutcalls \"mo:base/ExperimentalHttpOutcalls\"' in backend/main.mo (line 11) with the correct HTTP outcalls implementation. The base@0.13.4 package does not contain ExperimentalHttpOutcalls/lib.mo. Use the standard IC management canister approach by importing IC \"mo:base/ExperimentalInternetComputer\" or defining the HTTP outcalls types directly in the actor.",
+        "summary": "Fix the Motoko syntax error at line 40 in src/gateway/main.mo where an unexpected 'actor' token is causing compilation to fail. The error message states: 'syntax error [M0001], unexpected token 'actor', expected one of token or <phrase> sequence: <typ_un>'. Resolve the type annotation or declaration issue that is preventing the gateway canister from compiling.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Define the HTTP outcalls types and management canister interface directly in backend/main.mo if they are not available from base library. Include types for HttpRequestArgs, HttpHeader, HttpMethod, HttpResponsePayload, and the management canister interface for http_request method.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Ensure all existing HTTP outcall usage in backend/main.mo is updated to use the corrected import or inline type definitions. This includes any calls to management canister's http_request function for device APIs and weather data.",
+        "summary": "Ensure the gateway canister deploys successfully and has a valid wasm module so that canister calls like 'dfx canister call gateway registerDevice' work without the 'IC0537: Requested canister has no wasm module' error.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
@@ -35,7 +28,6 @@
   },
   "changedFiles": [
     "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-implementation-plan.json",

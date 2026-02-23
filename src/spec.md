@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the HTTP outcalls import error in backend/main.mo by replacing the missing ExperimentalHttpOutcalls module with the correct implementation.
+**Goal:** Fix the Motoko syntax error in the gateway canister to enable successful compilation and deployment.
 
 **Planned changes:**
-- Remove the non-existent import 'import ExperimentalHttpOutcalls "mo:base/ExperimentalHttpOutcalls"' from backend/main.mo
-- Define HTTP outcalls types and management canister interface directly in backend/main.mo (HttpRequestArgs, HttpHeader, HttpMethod, HttpResponsePayload, management canister actor)
-- Update all existing HTTP outcall usage to use the corrected type definitions
-- Ensure device API calls and weather data fetching continue to work
+- Resolve the syntax error at line 40 in src/gateway/main.mo where an unexpected 'actor' token is causing compilation failure
+- Fix the type annotation or declaration issue preventing the gateway canister from compiling
+- Ensure the gateway canister deploys with a valid wasm module
 
-**User-visible outcome:** The backend compiles successfully without import errors, and all existing HTTP outcall functionality (device management, weather API) works as before.
+**User-visible outcome:** The gateway canister compiles and deploys successfully, allowing device registration calls to work without IC0537 errors.
