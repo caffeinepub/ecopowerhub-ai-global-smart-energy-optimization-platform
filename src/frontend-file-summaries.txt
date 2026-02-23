@@ -91,5 +91,6 @@
   "frontend/docs/build-optimization-notes.md": "Comprehensive documentation of build optimization changes including duplicate key fixes, code splitting implementation, vendor chunk strategy, before/after bundle size comparison, and future optimization recommendations.",
   "frontend/src/routes/RootRoute.tsx": "Root route component that renders TanStack Router's Outlet to enable child route rendering.",
   "frontend/src/components/RouteErrorFallback.tsx": "Global error fallback UI component displaying user-friendly error messages with recovery actions (navigate home, retry, reload page).",
-  "frontend/src/components/AppErrorBoundary.tsx": "React class-based error boundary component that catches unexpected runtime errors during app rendering and displays a user-friendly recovery screen with options to navigate home (using hash routing) or reload the page, including error message display for debugging."
+  "frontend/src/components/AppErrorBoundary.tsx": "React class-based error boundary component that catches unexpected runtime errors during app rendering and displays a user-friendly recovery screen with options to navigate home (using hash routing) or reload the page, including error message display for debugging.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Internet Identity authentication hook with React context provider, login/logout functionality, and delegation identity validation using @dfinity/identity package imports for compatibility with latest @dfinity packages."
 }

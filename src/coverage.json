@@ -1,60 +1,48 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-18T08:10:20.418Z",
+  "generatedAt": "2026-02-23T03:51:17.124Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 3,
-    "implemented": 3,
+    "implemented": 0,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the frontend routing to use hash-based URLs (e.g., /#/dashboard) so page refreshes and deep-links work on ICP asset canisters without server-side rewrites. Implement this using the existing TanStack Router setup (not react-router-dom), configuring the router to use hash history.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/App.tsx"
-        ]
+        "summary": "Replace the non-existent import 'import ExperimentalHttpOutcalls \"mo:base/ExperimentalHttpOutcalls\"' in backend/main.mo (line 11) with the correct HTTP outcalls implementation. The base@0.13.4 package does not contain ExperimentalHttpOutcalls/lib.mo. Use the standard IC management canister approach by importing IC \"mo:base/ExperimentalInternetComputer\" or defining the HTTP outcalls types directly in the actor.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Adjust the Vite build configuration to use relative asset paths for ICP static hosting by setting Vite base to './' (and keep production build compatibility).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/vite.config.ts"
-        ],
-        "matchedFiles": [
-          "frontend/vite.config.ts"
-        ]
+        "summary": "Define the HTTP outcalls types and management canister interface directly in backend/main.mo if they are not available from base library. Include types for HttpRequestArgs, HttpHeader, HttpMethod, HttpResponsePayload, and the management canister interface for http_request method.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-3",
-        "summary": "Add a user-visible top-level error fallback so unexpected runtime errors during app/router rendering do not appear as a blank white screen. Use existing in-repo fallback components where possible and keep user-facing text in English.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/AppErrorBoundary.tsx",
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AppErrorBoundary.tsx",
-          "frontend/src/App.tsx"
-        ]
+        "summary": "Ensure all existing HTTP outcall usage in backend/main.mo is updated to use the corrected import or inline type definitions. This includes any calls to management canister's http_request function for device APIs and weather data.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
-    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/components/AppErrorBoundary.tsx",
-    "frontend/vite.config.ts",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

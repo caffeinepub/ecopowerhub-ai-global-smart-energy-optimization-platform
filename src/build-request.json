@@ -1,83 +1,76 @@
 {
   "kind": "build_request",
-  "title": "Switch to hash-based routing for ICP static hosting and fix Vite base path",
+  "title": "Fix HTTP outcalls import error by replacing missing ExperimentalHttpOutcalls module",
   "projectName": "EcoPowerHub AI",
   "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the frontend routing to use hash-based URLs (e.g., /#/dashboard) so page refreshes and deep-links work on ICP asset canisters without server-side rewrites. Implement this using the existing TanStack Router setup (not react-router-dom), configuring the router to use hash history.",
-      "target": "frontend",
+      "text": "Replace the non-existent import 'import ExperimentalHttpOutcalls \"mo:base/ExperimentalHttpOutcalls\"' in backend/main.mo (line 11) with the correct HTTP outcalls implementation. The base@0.13.4 package does not contain ExperimentalHttpOutcalls/lib.mo. Use the standard IC management canister approach by importing IC \"mo:base/ExperimentalInternetComputer\" or defining the HTTP outcalls types directly in the actor.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-5"
         ],
         "quotes": [
-          "Fix routing – switch to HashRouter (easiest for ICP static assets)\n...\nHashRouter uses # in URLs (e.g. /#/dashboard) – no server rewrites needed, perfect for ICP asset canisters."
+          "/home/bill/ecopowerhub-ai-clean/src/ais_assistant/main.mo:11.1-11.47: import error [M0009], file \".mops/base@0.13.4/src/ExperimentalHttpOutcalls/lib.mo\" does not exist"
         ]
       },
       "acceptanceCriteria": [
-        "Navigating to any existing route (e.g., dashboard, diagnostics, tech-specs) results in URLs that include a hash fragment (e.g., /#/dashboard).",
-        "Directly loading a deep link with a hash route (e.g., https://<canister-domain>/#/dashboard) renders the expected page instead of a blank/404 page.",
-        "All existing routes defined in frontend/src/App.tsx continue to work without changing their path strings."
+        "The import error M0009 is resolved",
+        "The Motoko compiler successfully compiles backend/main.mo",
+        "HTTP outcalls functionality remains intact for existing features (device API calls, weather API)",
+        "dfx deploy ais_assistant completes without compilation errors"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Adjust the Vite build configuration to use relative asset paths for ICP static hosting by setting Vite base to './' (and keep production build compatibility).",
-      "target": "frontend",
+      "text": "Define the HTTP outcalls types and management canister interface directly in backend/main.mo if they are not available from base library. Include types for HttpRequestArgs, HttpHeader, HttpMethod, HttpResponsePayload, and the management canister interface for http_request method.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-5"
         ],
         "quotes": [
-          "Try:\n... base: './',  // ← relative paths – often fixes asset loading on ICP"
+          "import error [M0009], file \".mops/base@0.13.4/src/ExperimentalHttpOutcalls/lib.mo\" does not exist"
         ]
       },
       "acceptanceCriteria": [
-        "frontend/vite.config.ts sets base to './'.",
-        "After running the production build, the generated dist/index.html references JS/CSS assets using relative paths that load correctly when hosted from an ICP asset canister."
+        "All HTTP outcalls type definitions are present and correct",
+        "The management canister actor is properly defined for making HTTP requests",
+        "Existing HTTP outcall functionality (setDevice, weather fetching) works as before"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Add a user-visible top-level error fallback so unexpected runtime errors during app/router rendering do not appear as a blank white screen. Use existing in-repo fallback components where possible and keep user-facing text in English.",
-      "target": "frontend",
+      "text": "Ensure all existing HTTP outcall usage in backend/main.mo is updated to use the corrected import or inline type definitions. This includes any calls to management canister's http_request function for device APIs and weather data.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Bonus: Add error boundary & fallback\n...\nThis should bring back the globe / content"
+          "msg-5"
         ]
       },
       "acceptanceCriteria": [
-        "If an exception is thrown during initial route rendering, the app shows an on-screen error message and at least one recovery action (e.g., reload or navigate home) instead of a blank screen.",
-        "Normal routing and page rendering behavior is unchanged when no error occurs.",
-        "All user-visible error text is in English."
+        "All HTTP outcall invocations compile successfully",
+        "The setDevice function at http://192.168.1.100/rpc/EM.GetStatus?id=0 continues to work",
+        "No runtime errors occur when making HTTP outcalls"
       ]
     }
   ],
   "constraints": [
-    "Do not edit immutable frontend files: frontend/src/main.tsx, frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, frontend/src/components/ui/**.",
-    "Keep all backend logic in the single Motoko actor (no backend changes required for this request)."
+    "Do not change the single-actor architecture",
+    "Preserve all existing backend functionality including device management, energy data, alarms, and EV integration",
+    "The solution must work with base@0.13.4 dependency as currently installed",
+    "Do not modify frontend code"
   ],
   "nonGoals": [
-    "Implementing clean (non-hash) URLs with server-side rewrite rules on ICP.",
-    "Changing the existing route paths or adding new product features unrelated to routing/build stability."
+    "Adding new features or functionality",
+    "Upgrading to a different version of the base library",
+    "Modifying the MOPS package configuration",
+    "Creating migration logic"
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

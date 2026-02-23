@@ -1,59 +1,6 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Switch TanStack Router to hash history and set Vite base to relative paths (ICP static hosting)",
-  "requirements": [
-    {
-      "id": "REQ-1",
-      "summary": "Configure the existing TanStack Router setup to use hash-based URLs so deep-links and refresh work on ICP asset canisters without rewrites.",
-      "acceptanceCriteria": [
-        "Navigating to any existing route (e.g., dashboard, diagnostics, tech-specs) results in URLs that include a hash fragment (e.g., /#/dashboard).",
-        "Directly loading a deep link with a hash route (e.g., https://<canister-domain>/#/dashboard) renders the expected page instead of a blank/404 page.",
-        "All existing routes defined in frontend/src/App.tsx continue to work without changing their path strings."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Update the TanStack Router creation to use hash history (e.g., via TanStack Router's hash history utility) so all existing route path strings remain unchanged while URLs become /#/<route> for ICP static hosting."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Set Vite base to './' so production builds use relative asset paths compatible with ICP static hosting.",
-      "acceptanceCriteria": [
-        "frontend/vite.config.ts sets base to './'.",
-        "After running the production build, the generated dist/index.html references JS/CSS assets using relative paths that load correctly when hosted from an ICP asset canister."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/vite.config.ts",
-          "operation": "modify",
-          "description": "Set Vite's base option to './' to ensure the production build emits relative JS/CSS asset paths suitable for ICP asset canister hosting, while preserving production build behavior."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Add a top-level runtime error fallback so unexpected errors during app/router rendering show a visible error screen with recovery actions.",
-      "acceptanceCriteria": [
-        "If an exception is thrown during initial route rendering, the app shows an on-screen error message and at least one recovery action (e.g., reload or navigate home) instead of a blank screen.",
-        "Normal routing and page rendering behavior is unchanged when no error occurs.",
-        "All user-visible error text is in English."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/AppErrorBoundary.tsx",
-          "operation": "create",
-          "description": "Create a top-level React error boundary component that catches unexpected runtime errors during initial render (including router/provider rendering) and shows an English error message plus recovery actions (at minimum: reload, and a 'go home' action compatible with hash routing)."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wrap the RouterProvider (and related top-level app rendering) with the new AppErrorBoundary so unexpected runtime errors display the fallback UI instead of a blank screen, without changing normal routing behavior when no error occurs."
-        }
-      ]
-    }
-  ]
+  "title": "Fix HTTP outcalls import error - Frontend Implementation Plan",
+  "requirements": []
 }

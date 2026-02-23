@@ -1,11 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Make the app work reliably on ICP static hosting by switching to hash-based routing, fixing Vite’s base path for relative assets, and adding a top-level runtime error fallback to avoid blank screens.
+**Goal:** Fix the HTTP outcalls import error in backend/main.mo by replacing the missing ExperimentalHttpOutcalls module with the correct implementation.
 
 **Planned changes:**
-- Update the existing TanStack Router configuration to use hash-based URL history so all current routes load correctly via `/#/...` deep links on ICP.
-- Set `base: './'` in `frontend/vite.config.ts` so production build assets are referenced with relative paths.
-- Add a top-level error fallback (using existing in-repo fallback components where possible) that displays an English error message and at least one recovery action (e.g., reload or navigate home) if an unexpected runtime error occurs during initial rendering.
+- Remove the non-existent import 'import ExperimentalHttpOutcalls "mo:base/ExperimentalHttpOutcalls"' from backend/main.mo
+- Define HTTP outcalls types and management canister interface directly in backend/main.mo (HttpRequestArgs, HttpHeader, HttpMethod, HttpResponsePayload, management canister actor)
+- Update all existing HTTP outcall usage to use the corrected type definitions
+- Ensure device API calls and weather data fetching continue to work
 
-**User-visible outcome:** All pages use hash URLs (e.g., `/#/dashboard`) and can be refreshed or deep-linked on ICP without 404/blank screens; built assets load correctly from an ICP asset canister; unexpected render-time errors show a visible fallback with a recovery option instead of a white screen.
+**User-visible outcome:** The backend compiles successfully without import errors, and all existing HTTP outcall functionality (device management, weather API) works as before.

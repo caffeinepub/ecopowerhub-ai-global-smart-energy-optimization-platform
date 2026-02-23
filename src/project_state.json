@@ -1,44 +1,48 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "EcoPowerHub frontend (Vite/React) deployed to an ICP asset canister; working on fixing build/routing issues for static hosting.",
+  "summary": "Internet Computer canister project with HTTP outcall integration issues",
   "architectural_notes": [
-    "For ICP asset canister static hosting, prefer react-router-dom HashRouter to avoid server-side rewrites (URLs use #).",
-    "Vite config may need base: './' to ensure relative asset paths work when served from an ICP canister/subpath."
+    "Using dfx (Internet Computer SDK) for deployment",
+    "Project uses Motoko language for canisters",
+    "Dependencies managed via mops (base@0.13.4, json@1.4.0, xtended-numbers@0.3.1)",
+    "Multiple canisters: ais_assistant, ecopowerhub_ai, ecopowerhub_ai_assets, equipa",
+    "HTTP outcalls integration for external device communication"
   ],
   "known_issues": [
-    "Vite/Rollup build error: \"default\" is not exported by src/App.tsx, imported by src/main.tsx (likely App component export/import mismatch or duplicate/incorrect file path).",
-    "Routing/asset loading may fail on ICP static assets when using BrowserRouter without rewrites; switch to HashRouter and/or adjust Vite base."
+    "Missing ExperimentalHttpOutcalls/lib.mo in base@0.13.4 dependency",
+    "Compilation failing on import error M0009",
+    "Missing .did file for ecopowerhub_ai canister"
   ],
   "isFixRequest": true,
-  "existing_features": [
+  "existing_features": [],
+  "new_feature_requests": [
     {
-      "id": "feature-update-the-frontend-routing-to-use-hash-based-urls-e-g-dashboard-so-page-refreshes-and-deep-links-work-on-icp-asset-canisters-without-server-side-rewrites-implement-this-using-the-existing-tanstack-router-setup-not-react-router-dom-configuring-the-router-to-use-hash-history",
-      "title": "Update the frontend routing to use hash-based URLs (e.g., /#/dashboard) so page refreshes and deep-links work on ICP asset canisters without server-side rewrites. Implement this using the existing TanStack Router setup (not react-router-dom), configuring the router to use hash history.",
+      "id": "AR-1",
+      "summary": "Replace the non-existent import 'import ExperimentalHttpOutcalls \"mo:base/ExperimentalHttpOutcalls\"' in backend/main.mo (line 11) with the correct HTTP outcalls implementation. The base@0.13.4 package does not contain ExperimentalHttpOutcalls/lib.mo. Use the standard IC management canister approach by importing IC \"mo:base/ExperimentalInternetComputer\" or defining the HTTP outcalls types directly in the actor.",
       "reqIds": [
         "REQ-1"
       ],
-      "version": 1
+      "status": "pending"
     },
     {
-      "id": "feature-adjust-the-vite-build-configuration-to-use-relative-asset-paths-for-icp-static-hosting-by-setting-vite-base-to-and-keep-production-build-compatibility",
-      "title": "Adjust the Vite build configuration to use relative asset paths for ICP static hosting by setting Vite base to './' (and keep production build compatibility).",
+      "id": "AR-2",
+      "summary": "Define the HTTP outcalls types and management canister interface directly in backend/main.mo if they are not available from base library. Include types for HttpRequestArgs, HttpHeader, HttpMethod, HttpResponsePayload, and the management canister interface for http_request method.",
       "reqIds": [
         "REQ-2"
       ],
-      "version": 1
+      "status": "pending"
     },
     {
-      "id": "feature-add-a-user-visible-top-level-error-fallback-so-unexpected-runtime-errors-during-app-router-rendering-do-not-appear-as-a-blank-white-screen-use-existing-in-repo-fallback-components-where-possible-and-keep-user-facing-text-in-english",
-      "title": "Add a user-visible top-level error fallback so unexpected runtime errors during app/router rendering do not appear as a blank white screen. Use existing in-repo fallback components where possible and keep user-facing text in English.",
+      "id": "AR-3",
+      "summary": "Ensure all existing HTTP outcall usage in backend/main.mo is updated to use the corrected import or inline type definitions. This includes any calls to management canister's http_request function for device APIs and weather data.",
       "reqIds": [
         "REQ-3"
       ],
-      "version": 1
+      "status": "pending"
     }
   ],
-  "new_feature_requests": [],
-  "projectName": "EcoPowerHub",
+  "projectName": "ecopowerhub-ai",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

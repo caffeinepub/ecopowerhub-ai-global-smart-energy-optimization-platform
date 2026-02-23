@@ -1,7 +1,7 @@
 // @generated
 import AccessControl "authorization/access-control";
-import OutCall "http-outcalls/outcall";
 import Stripe "stripe/stripe";
+import OutCall "http-outcalls/outcall";
 import Storage "blob-storage/Storage";
 import MixinStorage "blob-storage/Mixin";
 import Principal "mo:base/Principal";
@@ -12,7 +12,9 @@ import Text "mo:base/Text";
 import Time "mo:base/Time";
 import Float "mo:base/Float";
 import List "mo:base/List";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor EcoPowerHubAI {
   let storage = Storage.new();
   include MixinStorage(storage);
@@ -1773,13 +1775,7 @@ actor EcoPowerHubAI {
     };
   };
 
-  public shared ({ caller }) func getStripeSessionStatus(sessionId : Text) : async Stripe.StripeSessionStatus {
-    if (Principal.isAnonymous(caller)) {
-      Debug.trap("Unauthorized: Anonymous principal not allowed");
-    };
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Debug.trap("Unauthorized: Only users can check session status");
-    };
+  public func getStripeSessionStatus(sessionId : Text) : async Stripe.StripeSessionStatus {
     await Stripe.getSessionStatus(getStripeConfiguration(), sessionId, transform);
   };
 
@@ -1787,16 +1783,10 @@ actor EcoPowerHubAI {
     if (Principal.isAnonymous(caller)) {
       Debug.trap("Unauthorized: Anonymous principal not allowed");
     };
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Debug.trap("Unauthorized: Only users can create checkout sessions");
-    };
     await Stripe.createCheckoutSession(getStripeConfiguration(), caller, items, successUrl, cancelUrl, transform);
   };
 
   public query func transform(input : OutCall.TransformationInput) : async OutCall.TransformationOutput {
-    // Public access for HTTP outcall transformation
     OutCall.transform(input);
   };
-
 };
-
