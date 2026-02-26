@@ -1,0 +1,6 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Add getEnergySnapshot query method to equipa canister",
+  "requirements": []
+}

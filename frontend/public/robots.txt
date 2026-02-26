@@ -1,0 +1,13 @@
+# EcoPowerHub AI - Robots.txt
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /domains
+Disallow: /email-automation
+Disallow: /deployment-status
+
+# Sitemap
+Sitemap: https://ecopowerhub.ai/sitemap.xml
+
+# Crawl-delay for polite crawlers
+Crawl-delay: 1

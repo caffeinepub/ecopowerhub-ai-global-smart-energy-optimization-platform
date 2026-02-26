@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "EcoPowerHub AI project on ICP using Motoko canisters. The equipa canister (energy device integration) is deployed locally and working. Currently adding getEnergySnapshot query method that aggregates cached device data.",
+  "architectural_notes": [
+    "Equipa canister (br5f7-7uaaa-aaaaa-qaaca-cai) deployed locally on ICP using Motoko with mock device data; no JSON dependencies",
+    "Equipa canister uses HashMap for device registry and cached data with stable storage upgrade hooks",
+    "Frontend uses React 18 with @react-three/fiber@8.x and @react-three/drei@9.x for React 18 compatibility"
+  ],
+  "known_issues": [
+    "getEnergySnapshot method missing from deployed equipa canister — needs to be added and redeployed",
+    "@react-three/fiber and @react-three/drei required downgrade to v8/v9 for React 18 compatibility",
+    "@dfinity/auth-client@3.4.3 is deprecated; functionality moved to @icp-sdk/auth"
+  ],
+  "isFixRequest": false,
+  "existing_features": [],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Add getEnergySnapshot query method to equipa canister returning aggregated energy data (total power, active devices, average carbon, cycle cost, timestamp)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add a `getEnergySnapshot` query method to the equipa canister (backend/main.mo or the equipa canister source) that aggregates all cached device data and returns a record containing: total power (sum of all cached device power values), active device count (number of devices with cached data), average carbon intensity (average of all cached carbon values), current cycle cost (from the existing cycleCost state variable), and a timestamp (current time or latest cached timestamp).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "EcoPowerHub AI",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

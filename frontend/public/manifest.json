@@ -1,0 +1,55 @@
+{
+  "name": "EcoPowerHub AI – Global Smart Energy Optimization Platform",
+  "short_name": "EcoPowerHub AI",
+  "description": "Connect your smart plugs, get voice-guided coaching in your language – save on bills worldwide.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4CAF50",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/generated/pwa-energy-app-icon-transparent.dim_200x200.png",
+      "sizes": "200x200",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/generated/ecopowerhub-ai-logo-transparent.dim_200x200.png",
+      "sizes": "200x200",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your energy dashboard",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/assets/generated/energy-dashboard-mockup.dim_800x600.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Diagnostics",
+      "short_name": "Diagnostics",
+      "description": "Run system diagnostics",
+      "url": "/diagnostics",
+      "icons": [
+        {
+          "src": "/assets/generated/diagnostic-help-center.dim_800x600.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

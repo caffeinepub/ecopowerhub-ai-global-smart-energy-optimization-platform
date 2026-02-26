@@ -1,0 +1,103 @@
+EcoPowerHub AI - Visual Style Guide
+====================================
+
+Theme: Futuristic Energy Network
+Color Palette: Blue/Green Professional Dashboard
+
+PRIMARY COLORS
+--------------
+Sky Blue:     #0EA5E9 (rgb(14, 165, 233))
+Emerald:      #10B981 (rgb(16, 185, 129))
+Teal:         #14B8A6 (rgb(20, 184, 166))
+
+BACKGROUND COLORS
+-----------------
+Dark:         #0F172A (rgb(15, 23, 42))
+Light:        #F0F9FF (rgb(240, 249, 255))
+Gradient:     Linear from #0EA5E9 to #10B981
+
+ACCENT COLORS
+-------------
+Warning:      #F59E0B (rgb(245, 158, 11))
+Success:      #10B981 (rgb(16, 185, 129))
+Error:        #EF4444 (rgb(239, 68, 68))
+
+TYPOGRAPHY
+----------
+Headings:     Inter, system-ui, sans-serif
+Body:         Inter, system-ui, sans-serif
+Monospace:    'Courier New', monospace
+
+VISUAL ELEMENTS
+---------------
+1. Energy Flow Lines: Glowing blue/green lines with subtle animation feel
+2. Circuit Patterns: Geometric tech patterns in backgrounds
+3. Glowing Nodes: Circular connection points with soft glow
+4. Data Visualization: Clean charts with blue/green gradients
+5. Icons: Line-style icons with 2px stroke weight
+
+LOGO REQUIREMENTS
+-----------------
+- Transparent background (alpha channel)
+- Centered in canvas
+- Minimum 20px padding from edges
+- Professional brand representation
+- No solid background blocks
+
+DASHBOARD/SCREENSHOT REQUIREMENTS
+----------------------------------
+- Professional UI aesthetic
+- Clean, modern interface design
+- Blue/green color scheme
+- Readable text (minimum 12px)
+- High contrast for accessibility
+- Polished, production-ready look
+
+PRODUCT PHOTOGRAPHY
+-------------------
+- Clean white or gradient background
+- Professional lighting
+- Product centered and prominent
+- Shadows subtle and realistic
+- High quality, sharp focus
+
+AVATAR REQUIREMENTS
+-------------------
+- Circular crop
+- Transparent background
+- Professional headshot style
+- Friendly, approachable expression
+- Centered face, good lighting
+
+INFOGRAPHIC STYLE
+-----------------
+- Clean, modern layout
+- Icons with consistent style
+- Blue/green color scheme
+- Clear hierarchy
+- Professional typography
+- Data-driven visuals
+
+OPTIMIZATION
+------------
+- Target: Under 500 KB per file
+- Format: PNG-8 or PNG-24 with alpha
+- Compression: Balanced quality/size
+- Color Space: sRGB
+- Resolution: 72 DPI
+
+CONSISTENCY RULES
+-----------------
+1. All assets in same category share visual language
+2. Maintain color palette across all images
+3. Use consistent lighting and shadows
+4. Keep typography style uniform
+5. Match UI element styles across dashboards
+
+ACCESSIBILITY
+-------------
+- Minimum contrast ratio: 4.5:1 for text
+- Color not sole indicator of information
+- Clear, readable fonts
+- Sufficient padding and spacing
+- Icons paired with labels where possible
