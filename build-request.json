@@ -1,42 +1,59 @@
 {
   "kind": "build_request",
-  "title": "Add getEnergySnapshot query method to equipa canister",
-  "projectName": "EcoPowerHub AI",
-  "priority": "normal",
+  "title": "Fix equipa main.mo: add HashMap import and use Time.now() for timestamps",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add a `getEnergySnapshot` query method to the equipa canister (backend/main.mo or the equipa canister source) that aggregates all cached device data and returns a record containing: total power (sum of all cached device power values), active device count (number of devices with cached data), average carbon intensity (average of all cached carbon values), current cycle cost (from the existing cycleCost state variable), and a timestamp (current time or latest cached timestamp).",
+      "text": "In backend/main.mo (the equipa canister), add the missing import statement `import HashMap \"mo:base/HashMap\";` so the canister compiles without the 'unbound variable HashMap' error at line 47.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-recent"
+          "msg-1",
+          "msg-2"
         ],
         "quotes": [
-          "Just confirm and I'll generate the updated equipa code with that method included.",
-          "generate the updated equipa code with that method included."
+          "unbound variable HashMap",
+          "provide the full corrected main.mo with the HashMap import"
         ]
       },
       "acceptanceCriteria": [
-        "The method is declared as a `query` function named `getEnergySnapshot`.",
-        "It returns a record with fields: totalPower (Float), activeDevices (Nat), averageCarbon (Float), cycleCost (Nat), and timestamp (Int).",
-        "When no devices are cached, totalPower = 0.0, activeDevices = 0, averageCarbon = 0.0, and cycleCost reflects the current stored value.",
-        "When devices are cached, totalPower is the sum of all cached device power fields, activeDevices is the count of cached entries, and averageCarbon is the arithmetic mean of all cached carbon fields.",
-        "`dfx canister call --query equipa getEnergySnapshot` returns successfully without IC0536 error after redeployment.",
-        "Existing methods (listDevices, registerDevice, fetchDeviceData, getCachedData, getAllCachedData, setCycleCost, getCycleCost, resetCycleCost) remain unchanged and functional."
+        "The import `import HashMap \"mo:base/HashMap\";` is present at the top of main.mo alongside other imports",
+        "Running `dfx deploy equipa` completes without the 'unbound variable HashMap' type error",
+        "All existing HashMap usages in the file resolve correctly"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "In backend/main.mo, fix all places where device records are constructed with `timestamp = 0` by replacing the hardcoded `0` with `Time.now()`. Add `import Time \"mo:base/Time\";` if not already present.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-2"
+        ],
+        "quotes": [
+          "timestamp = 0 : int",
+          "fix the timestamp = 0 issue by adding Time.now()"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The import `import Time \"mo:base/Time\";` is present in main.mo",
+        "Every location that previously assigned `timestamp = 0` now assigns `timestamp = Time.now()`",
+        "Querying any registered device (e.g., shelly-1) returns a record where `timestamp` is a non-zero integer reflecting the current IC time",
+        "The canister deploys and runs without compilation errors"
       ]
     }
   ],
   "constraints": [
-    "All logic must remain in the single equipa canister Motoko actor — do not create new canisters or files.",
-    "Do not alter the existing data structures or state variables beyond what is needed to support getEnergySnapshot.",
-    "Do not break any existing exported methods."
+    "Only modify backend/main.mo — do not change any frontend files",
+    "Do not alter the existing data model, Candid interface, or any stable variable declarations beyond what is required for these two fixes",
+    "Do not introduce new dependencies beyond mo:base/HashMap and mo:base/Time"
   ],
   "nonGoals": [
-    "Upgrading React, @react-three/fiber, @react-three/drei, or @dfinity/auth-client.",
-    "Any frontend UI changes.",
-    "Adding write/update methods.",
-    "Persistent snapshot storage — this is a computed query only."
+    "Fixing the mock device data values (power=1250.0, voltage=240.0, current=5.2, carbon=0.85) — real Shelly HTTP response parsing is out of scope for this request",
+    "Cleaning up duplicate cron entries",
+    "Any frontend changes"
   ],
   "imageRequirements": {
     "required": [],

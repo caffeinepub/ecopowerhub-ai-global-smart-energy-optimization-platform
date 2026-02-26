@@ -464,6 +464,7 @@ export interface _SERVICE {
   'deleteScheduledUpdate' : ActorMethod<[string], undefined>,
   'deleteSupportedDevice' : ActorMethod<[string, string], undefined>,
   'deleteSystemConfig' : ActorMethod<[string], undefined>,
+  'forceRefresh' : ActorMethod<[], string>,
   'getAlarmConfig' : ActorMethod<[string], [] | [AlarmConfig]>,
   'getAllAlarmConfigs' : ActorMethod<[], Array<AlarmConfig>>,
   'getAllCaseStudies' : ActorMethod<[], Array<CaseStudy>>,

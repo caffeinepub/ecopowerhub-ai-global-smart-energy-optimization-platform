@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Add a `getEnergySnapshot` query method to the equipa canister that aggregates all cached device data into a single snapshot record.
+**Goal:** Fix two compilation errors in `backend/main.mo` for the equipa canister: add the missing `HashMap` import and replace hardcoded `timestamp = 0` values with `Time.now()`.
 
 **Planned changes:**
-- Add a `getEnergySnapshot` query function to the equipa canister (Motoko actor) that computes and returns a record with: `totalPower` (Float), `activeDevices` (Nat), `averageCarbon` (Float), `cycleCost` (Nat), and `timestamp` (Int)
-- When no devices are cached, `totalPower` and `averageCarbon` default to 0.0 and `activeDevices` to 0
-- When devices are cached, aggregate power sum, device count, and arithmetic mean of carbon values from the cache
-- All existing methods remain unchanged
+- Add `import HashMap "mo:base/HashMap";` to the imports section of `backend/main.mo`
+- Add `import Time "mo:base/Time";` to the imports section of `backend/main.mo` if not already present
+- Replace all instances of `timestamp = 0` in device record construction with `timestamp = Time.now()`
 
-**User-visible outcome:** Calling `dfx canister call --query equipa getEnergySnapshot` returns a snapshot of aggregated energy data without errors, and all previously existing canister methods continue to work as before.
+**User-visible outcome:** The equipa canister compiles and deploys without errors, and registered devices return a non-zero timestamp reflecting the current IC time.

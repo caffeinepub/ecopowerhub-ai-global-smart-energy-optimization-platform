@@ -558,6 +558,7 @@ export interface backendInterface {
     deleteScheduledUpdate(updateId: string): Promise<void>;
     deleteSupportedDevice(brand: string, model: string): Promise<void>;
     deleteSystemConfig(systemId: string): Promise<void>;
+    forceRefresh(): Promise<string>;
     getAlarmConfig(alarmId: string): Promise<AlarmConfig | null>;
     getAllAlarmConfigs(): Promise<Array<AlarmConfig>>;
     getAllCaseStudies(): Promise<Array<CaseStudy>>;
@@ -1221,6 +1222,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.deleteSystemConfig(arg0);
+            return result;
+        }
+    }
+    async forceRefresh(): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.forceRefresh();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.forceRefresh();
             return result;
         }
     }

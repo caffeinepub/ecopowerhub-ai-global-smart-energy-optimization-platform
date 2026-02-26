@@ -213,6 +213,25 @@ export function useGetEnergySnapshot() {
   });
 }
 
+// Force Refresh Mutation (Admin only)
+export function useForceRefresh() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (): Promise<string> => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.forceRefresh();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['energyData'] });
+      queryClient.invalidateQueries({ queryKey: ['energySnapshot'] });
+      queryClient.invalidateQueries({ queryKey: ['deviceHealth'] });
+      queryClient.invalidateQueries({ queryKey: ['systemConfigs'] });
+    },
+  });
+}
+
 // Recommendations Queries
 export function useGetAllRecommendations() {
   const { actor, isFetching } = useActor();

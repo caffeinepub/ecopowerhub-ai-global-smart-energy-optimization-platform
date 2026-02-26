@@ -1,37 +1,48 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "EcoPowerHub AI project on ICP using Motoko canisters. The equipa canister (energy device integration) is deployed locally and working. Currently adding getEnergySnapshot query method that aggregates cached device data.",
+  "summary": "EcoPowerHub.ai - IoT energy monitoring platform on ICP (Internet Computer). Uses a Motoko canister (equipa) to poll Shelly smart energy devices (shelly-1, shelly-em, shelly-live) via HTTP outcalls. A Node.js poller script (poll-devices.cjs) runs via cron every minute using the automation-plain dfx identity. Currently polling works when run manually with full dfx path, but cron still has duplicate entries. The equipa canister has a build error (missing HashMap import) and returns mock data with timestamp=0.",
   "architectural_notes": [
-    "Equipa canister (br5f7-7uaaa-aaaaa-qaaca-cai) deployed locally on ICP using Motoko with mock device data; no JSON dependencies",
-    "Equipa canister uses HashMap for device registry and cached data with stable storage upgrade hooks",
-    "Frontend uses React 18 with @react-three/fiber@8.x and @react-three/drei@9.x for React 18 compatibility"
+    "Project: EcoPowerHub.ai on ICP local network. Motoko canister 'equipa' (br5f7-7uaaa-aaaaa-qaaca-cai) polls Shelly devices via HTTP outcalls.",
+    "Polling: Node.js poll-devices.cjs uses dfx CLI via child_process. Must use full path /home/bill/.local/share/dfx/bin/dfx when invoked from cron.",
+    "Devices: shelly-1 (http://192.168.1.100/rpc), shelly-em (http://172.27.84.95:8080/data), shelly-live (http://192.168.1.100/rpc/EM.GetStatus?id=0)",
+    "Cron: still has duplicate entries; needs cleanup to single: * * * * * cd /home/bill/ecopowerhub-ai-clean && /usr/bin/node poll-devices.cjs --once",
+    "equipa canister returns mock data (power=1250.0, timestamp=0) - needs real Shelly JSON parsing and Time.now() timestamps"
   ],
   "known_issues": [
-    "getEnergySnapshot method missing from deployed equipa canister — needs to be added and redeployed",
-    "@react-three/fiber and @react-three/drei required downgrade to v8/v9 for React 18 compatibility",
-    "@dfinity/auth-client@3.4.3 is deprecated; functionality moved to @icp-sdk/auth"
+    "equipa main.mo build error: unbound variable HashMap at line 47 - missing import",
+    "equipa canister returns timestamp=0 for all device records - needs Time.now()",
+    "Cron has duplicate/mixed entries causing duplicate poll cycles; bare 'dfx' entries fail with 'dfx: not found'",
+    "All devices return mock values (power=1250.0, voltage=240.0, current=5.2, carbon=0.85) - canister not parsing real Shelly HTTP responses"
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add getEnergySnapshot query method to equipa canister returning aggregated energy data (total power, active devices, average carbon, cycle cost, timestamp)",
+      "summary": "Fix equipa main.mo: add missing HashMap import and fix timestamp=0 by using Time.now()",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add a `getEnergySnapshot` query method to the equipa canister (backend/main.mo or the equipa canister source) that aggregates all cached device data and returns a record containing: total power (sum of all cached device power values), active device count (number of devices with cached data), average carbon intensity (average of all cached carbon values), current cycle cost (from the existing cycleCost state variable), and a timestamp (current time or latest cached timestamp).",
+      "summary": "In backend/main.mo (the equipa canister), add the missing import statement `import HashMap \"mo:base/HashMap\";` so the canister compiles without the 'unbound variable HashMap' error at line 47.",
       "reqIds": [
         "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "In backend/main.mo, fix all places where device records are constructed with `timestamp = 0` by replacing the hardcoded `0` with `Time.now()`. Add `import Time \"mo:base/Time\";` if not already present.",
+      "reqIds": [
+        "REQ-2"
       ],
       "status": "pending"
     }
   ],
   "gameProjectType": "none",
-  "projectName": "EcoPowerHub AI",
+  "projectName": "EcoPowerHub.ai",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

@@ -459,6 +459,7 @@ export interface backendInterface {
     deleteScheduledUpdate(updateId: string): Promise<void>;
     deleteSupportedDevice(brand: string, model: string): Promise<void>;
     deleteSystemConfig(systemId: string): Promise<void>;
+    forceRefresh(): Promise<string>;
     getAlarmConfig(alarmId: string): Promise<AlarmConfig | null>;
     getAllAlarmConfigs(): Promise<Array<AlarmConfig>>;
     getAllCaseStudies(): Promise<Array<CaseStudy>>;

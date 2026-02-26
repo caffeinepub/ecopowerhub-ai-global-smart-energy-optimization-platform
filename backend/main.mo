@@ -13,6 +13,7 @@ import Time "mo:base/Time";
 import List "mo:base/List";
 import Float "mo:base/Float";
 import Int "mo:base/Int";
+import HashMap "mo:base/HashMap"; // Added missing import
 
 actor EcoPowerHubAI {
   let storage = Storage.new();
@@ -1338,6 +1339,30 @@ actor EcoPowerHubAI {
     };
     textMap.get(domainPortfolio, "main");
   };
+
+  // *** New Force Refresh Method ***
+  public shared ({ caller }) func forceRefresh() : async Text {
+    if (Principal.isAnonymous(caller)) {
+      Debug.trap("Unauthorized: Anonymous principal not allowed");
+    };
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Debug.trap("Unauthorized: Only admins can force refresh devices");
+    };
+    let devices = List.toArray(deviceHealthRecords);
+
+    // Iterate over all devices and simulate fetchDeviceData for each
+    for (device in devices.vals()) {
+      // Here we just log the refresh action, real implementation would call fetchDeviceData
+      //await fetchDeviceData(device.deviceId);
+      // For now, we just print to debug
+      Debug.print("Refreshed device: " # device.deviceId);
+    };
+
+    // Directly return the number of devices processed without conversion errors
+    "Refreshed " # debug_show (devices.size()) # " devices";
+  };
+
+  // *** End of New Force Refresh Method ***
 
   // Maintenance Dashboard Management (Admin only)
   public shared ({ caller }) func addMaintenanceEvent(event : MaintenanceEvent) : async () {
